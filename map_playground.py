@@ -3,7 +3,6 @@
 import index
 
 def print_content():
-    print('<table border=4><tr><th>')
     print("""
 <style type="text/css">
 	.draggable{
@@ -11,56 +10,12 @@ def print_content():
 		cursor: move;
 	}
 </style>
-<script type="text/javascript">
-        function startDrag(e) {
-            // determine event object
-            if (!e) {
-                var e = window.event;
-            }
+<script src="mapping.js" />
+""")                            # WHY CAN'T I INCLUDE THIS SCRIPT AARHGH
 
-            // IE uses srcElement, others use target
-            var targ = e.target ? e.target : e.srcElement;
-
-            if (targ.className != 'dragme') {return};
-            // calculate event X, Y coordinates
-                offsetX = e.clientX;
-                offsetY = e.clientY;
-
-            // assign default values for top and left properties
-            if(!targ.style.left) { targ.style.left='0px'};
-            if (!targ.style.top) { targ.style.top='0px'};
-
-            // calculate integer values for top and left 
-            // properties
-            coordX = parseInt(targ.style.left);
-            coordY = parseInt(targ.style.top);
-            drag = true;
-
-            // move div element
-                document.onmousemove=dragDiv;
-
-	    return false;
-        }
-        function dragDiv(e) {
-            if (!drag) {return};
-            if (!e) { var e= window.event};
-            var targ=e.target?e.target:e.srcElement;
-            // move div element
-            targ.style.left=coordX+e.clientX-offsetX+'px';
-            targ.style.top=coordY+e.clientY-offsetY+'px';
-            return false;
-        }
-        function stopDrag() {
-            drag=false;
-        }
-        window.onload = function() {
-            document.onmousedown = startDrag;
-            document.onmouseup = stopDrag;
-        }
-</script>
-""")
-
-    print("<img src='globe.gif' class='draggable' />")
+    print('<table border=4><tr><th>')
+    #print("<img src='someRandomMap.jpg' class='draggable' />")
+    print("<img src='http://3.bp.blogspot.com/--Qn8gNCWlUc/UVhKBl5o5aI/AAAAAAAACYI/wMLgckCYQIs/s1600/Screen+Shot+2013-03-31+at+12.59.10+AM.png' />")
     print('</th></tr></table>')
 
 if __name__ == '__main__':
