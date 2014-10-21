@@ -1,0 +1,49 @@
+<!-- Note that this is printed from ../map.py, so paths should include this dir -->
+
+<style type="text/css">
+.draggable{
+	position:relative;
+	cursor: move;
+}
+
+#mapFrame{
+	width: 1000px;
+	height: 700px;
+	background-color: darkgrey;
+}
+
+#mapTable{
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.mapTableEntry{
+	width: 64px;
+	height: 64px;
+}
+</style>
+<script src="map/mapping.js"></script>
+
+<table border=4><tr><th style="overflow: hidden;">
+<div id="mapFrame">
+  
+<!--<img id='mapImage' src='map/someRandomMap.jpg' class='draggable' style='top:-500px;left:-500px;zoom=.5' />-->
+<table id="mapTable" class="draggable">
+
+<!-- Create the table that holds our map. Note that by default no tiles are loaded. -->
+<script type="text/javascript">
+for(var x=0; x<15; x++){
+	document.write('<tr>');
+ 	for(var y=0; y<15; y++){
+ 		var name = tile_name(x,y);
+ 		document.write('<td><div class=".mapTableEntry" id="'+name+'"></div></td>');
+	}
+	document.write('</tr>');
+}
+</script>
+
+</table>
+</div>
+</th></tr></table>
+
