@@ -1,7 +1,0 @@
-map:
-	+zoom control
-	+better navigation in general
-	+ability to view various images (political vs geo bounds, etc) as maps
-
-forum:
-	+add a forum
