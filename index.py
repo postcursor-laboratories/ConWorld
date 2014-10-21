@@ -24,7 +24,7 @@ def print_header():
     print('<h2>')
     print('<a href="index.py">Home</a>')
     print('<a href="about.py">About</a>')
-    print('<a href="map_playground.py">maptest</a>')
+    print('<a href="map.py">Map</a>')
     print('<a href="uh.py">and</a>')
     print('<a href="uh.py">some</a>')
     print('<a href="uh.py">more</a>')
