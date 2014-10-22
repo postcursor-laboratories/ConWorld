@@ -84,6 +84,10 @@ function tile_name(x, y){
 function change_tile_loadedness(x,y,load){
     var name = tile_name(x,y);
     var elem = document.getElementById(name);
+
+    if (!elem)
+	console.log("Couldn't get elem "+name+":", elem);
+
     var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
     var currLoaded = elem.attributes['currentlyLoaded'].value === 'Y';
 
@@ -130,8 +134,8 @@ function map_move(x,y){
 	    for(var j=-radius_unload; j<radius_unload; j++){
 		if (midTileX+i < 0)	continue;
 		if (midTileY+j < 0)	continue;
-		if (midTileX+i > mapSize)	continue;
-		if (midTileY+j > mapSize)	continue;
+		if (midTileX+i >= mapSize)	continue;
+		if (midTileY+j >= mapSize)	continue;
 
 		var load = i*i+j*j < radius_load*radius_load;
 		change_tile_loadedness(midTileX+i, midTileY+j, load);
