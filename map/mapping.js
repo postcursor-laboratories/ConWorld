@@ -110,15 +110,13 @@ function map_move(x,y){
     if (x < minX)	x = minX;
     if (y < minY)	y = minY;
 
+    // -----------------------------------------------------------------------------------
     // move the actual map
     var targ = document.getElementById("mapTableHolder");
     targ.style.left = x+'px';
     targ.style.top  = y+'px';
     
-    // update metadata
-    document.getElementById("mapXPosition").innerHTML = "X: "+x;
-    document.getElementById("mapYPosition").innerHTML = "Y: "+y;
-
+    // -----------------------------------------------------------------------------------
     // load or unload tiles (units in tiles, not pixels)
     var radius_unload = 4;
     var radius_load   = 2;
@@ -144,4 +142,20 @@ function map_move(x,y){
 
     map_move_lastMidTileX = midTileX;
     map_move_lastMidTileY = midTileY;
+
+    // -----------------------------------------------------------------------------------
+    // update metadata
+    
+    var offsetX = -x/256 + parseInt(mapFrame.style.width) /2/256 - mapSize/2;
+    var offsetY = -y/256 + parseInt(mapFrame.style.height)/2/256 - mapSize/2;
+    offsetX = Math.floor(offsetX*100)/100;
+    offsetY = Math.floor(offsetY*100)/100;
+
+    // km? Some invented unit? Furlong-wheelbarrows per square sharkfin? Who knows??
+    var unit = " tiles "; //"<sup>T</sup>";	// "&deg;"
+    offsetX = Math.abs(offsetX)+unit+(offsetX>=0 ? "East"  : "West");
+    offsetY = Math.abs(offsetY)+unit+(offsetY>=0 ? "South" : "North");
+
+    var position = "<pre>"+offsetY+", "+offsetX+"</pre>";
+    document.getElementById("mapPosition").innerHTML = position;
 }
