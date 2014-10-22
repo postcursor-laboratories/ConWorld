@@ -3,30 +3,29 @@
 
 function drag_getTarget(e){
     // IE uses srcElement, sanity uses target
-    var targ = e.target ? e.target : e.srcElement;
+    //var targ = e.target ? e.target : e.srcElement;
+
+    // it was the above because we were dragging images; here, we want to drag a full div
+    var targ = document.getElementById("mapTableHolder");
     return targ;
 }
 
 function drag_init(e) {
     //console.log("drag_init("+e+")");
-
+    
     // determine event object
-    if (!e) {
-        var e = window.event;
-    }
+    if (!e)
+	var e = window.event;
 
     var targ = drag_getTarget(e);
-    if (targ.className != 'draggable') {
-	return
+    if (targ.className != 'draggable'){
+	return;
     }
 
     // calculate event X, Y coordinates
     clickInitialX = e.clientX;
     clickInitialY = e.clientY;
 
-    //console.log(targ);
-    //console.log(targ.style);
-    //console.log("LEFT: "+targ.style.left);
     // assign default values for top and left properties
     if(!targ.style.left) { targ.style.left = '0px'};
     if(!targ.style.top)  { targ.style.top  = '0px'};
@@ -37,35 +36,43 @@ function drag_init(e) {
     drag_isDragging = true;
 
     // move element
-    document.onmousemove=drag_drag;
+    document.getElementById("mapTableHolder").onmousemove=drag_drag;
     return false;
 }
 
 function drag_drag(e) {
     //console.log("drag_drag("+e+")");
 
-    if (!drag_isDragging) {return};
-    if (!e) {
-	var e=window.event
-    }
+    if (!drag_isDragging)   return;
+    if (!e)	var e=window.event;
 
     var targ = drag_getTarget(e);
 
-    var shouldMove = true;
-    /* // TODO: boundary conditions
-    if(coordX < 0 && clickInitialX < 0)
-	shouldMove = true;
-    if(targ.height + clickInitialY > 0)
-	shouldMove = true;
-    */
+    // get new position
+    var x = coordX+e.clientX-clickInitialX;
+    var y = coordY+e.clientY-clickInitialY;
 
-    // move element
-    if(shouldMove){
-	targ.style.left = coordX+e.clientX-clickInitialX+'px';
-	targ.style.top  = coordY+e.clientY-clickInitialY+'px';
-	//targ.style.zoom += e.scroll;
-	return false;
-    }
+    // for boundary calculations.
+    var mapFrame = document.getElementById("mapFrame");
+    var mapTable = document.getElementById("mapTable");
+    var minX = -mapTable.clientWidth  + parseInt(mapFrame.style.width);
+    var minY = -mapTable.clientHeight + parseInt(mapFrame.style.height);
+
+    // check boundaries
+    if (x > 0)	x = 0;
+    if (y > 0)	y = 0;
+    if (x < minX)	x = minX;
+    if (y < minY)	y = minY;
+
+    // move the actual map
+    targ.style.left = x+'px';
+    targ.style.top  = y+'px';
+    
+    // update metadata
+    map_updatePositionText(x,y);
+    
+    // return false so the browser doesn't derp about handling mouse events
+    return false;
 }
 
 function drag_stop() {
@@ -80,7 +87,10 @@ window.onload = function() {
 
 // ====================================================================== end dragging code
 
+
 function tile_name(x, y){
+    console.log("tile_name("+x+","+y+")");
+
     if(x < 0 || x >= 2048) return 'invalid';
     if(y < 0 || y >= 2048) return 'invalid';
 
@@ -95,4 +105,9 @@ function change_tile_loadedness(x,y,loaded){
     console.log(elem);
     var text = loaded ? '<img src="map/'+name+'.png" />' : '';
     elem.innerHTML = text;
+}
+
+function map_updatePositionText(x,y){
+    document.getElementById("mapXPosition").innerHTML = "X: "+x;
+    document.getElementById("mapYPosition").innerHTML = "Y: "+y;
 }
