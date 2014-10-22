@@ -30,6 +30,7 @@ class TagMaker:
     def __init__(self):
         self.cache = {}
     def __getattr__(self, name):
+        cache = self.cache
         if not name in cache:
             def make(content='', **kwargs):
                 return Tag(name, content, **kwargs)
