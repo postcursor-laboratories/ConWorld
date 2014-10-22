@@ -128,6 +128,11 @@ function map_move(x,y){
     if (midTileX !== map_move_lastMidTileX || midTileY !== map_move_lastMidTileY){
 	for(var i=-radius_unload; i<radius_unload; i++)
 	    for(var j=-radius_unload; j<radius_unload; j++){
+		if (midTileX+i < 0)	continue;
+		if (midTileY+j < 0)	continue;
+		if (midTileX+i > mapSize)	continue;
+		if (midTileY+j > mapSize)	continue;
+
 		var load = i*i+j*j < radius_load*radius_load;
 		change_tile_loadedness(midTileX+i, midTileY+j, load);
 	    }
