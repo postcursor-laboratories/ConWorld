@@ -20,7 +20,7 @@ class Tag:
         self.attrs = kwargs
     def get_tag(self):
         contents = Tag.__transform(self.content)
-        attrstr = ' '.join(['{}={}'.format(x[0], x[1]) for x in self.attrs.iterkeys()])
+        attrstr = ' '.join(['{}={}'.format(x[0], x[1]) for x in self.attrs.iteritems()])
         tag = '<{} {}>{}</{}>'.format(self.tag_name, attrstr, contents, self.tag_name)
         return tag
     def print_tag(self):
