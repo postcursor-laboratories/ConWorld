@@ -46,6 +46,8 @@ def recursiveparse(node):
     tags = []
     if hasattr(node, 'children'):
         for child in node.children:
+            if isinstance(child, bs4.Comment):
+                continue
             tags += recursiveparse(child)
         if not isinstance(node, bs4.BeautifulSoup):
             tags = [maketag(node.name, content=tags)]
