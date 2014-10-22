@@ -67,6 +67,9 @@ class TagMaker:
         soup = bs4.BeautifulSoup(string)
         tag = recursiveparse(soup)
         return tag
+    def parsefile(self, f):
+        with open(f) as fd:
+            return self.parse(fd.read())
 
 makerInstance = TagMaker()
 def maker():
