@@ -18,6 +18,10 @@ class Tag:
     def __init__(self, name, contents='', **kwargs):
         self.tag_name = name
         self.content = contents
+        if 'class_' in kwargs:
+            # class_ must be used in call, substitute
+            kwargs['class'] = kwargs['class_']
+            del kwargs['class_']
         self.attrs = kwargs
     def __repr__(self):
         return self.get_tag()
