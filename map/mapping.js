@@ -103,7 +103,8 @@ function change_tile_loadedness(x,y,loaded){
     var name = tile_name(x,y);
     var elem = document.getElementById(name);
     console.log(elem);
-    var text = loaded ? '<img src="map/'+name+'.png" />' : '';
+    var text = '<img src="map/' + (loaded ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
+    //var text = loaded ? '<img src="map/get_tile.py?n='+name+'" />' : '';
     elem.innerHTML = text;
 }
 
