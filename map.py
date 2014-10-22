@@ -3,7 +3,7 @@
 import index
 import tag
 
-maphtml = tag.maker().parsefile('map.html')[0]
+maphtml = tag.maker().parsefile('map/map.html')[0]
 
 def print_content():
     maphtml.print_tag()
