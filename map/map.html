@@ -39,15 +39,17 @@
 	  
 	    <!-- Create the table that holds our map. Note that by default no tiles are loaded. -->
 	    <script type="text/javascript">
-for(var y=0; y<10; y++){
+var mapSize = 32;
+for(var y=0; y<mapSize; y++){
 	document.write('<tr>');
- 	for(var x=0; x<10; x++){
+ 	for(var x=0; x<mapSize; x++){
  		var name = tile_name(x,y);
- 		//document.write('<td><div class="mapTableEntry" id="'+name+'"></div></td>');
-		document.write('<td><div class="mapTableEntry" id="'+name+'"><img src="map/unloaded.png" /></div></td>');
+		document.write('<td><div class="mapTableEntry" id="'+name+'" currentlyLoaded="N"><img src="map/unloaded.png" /></div></td>');
 	}
 	document.write('</tr>');
 }
+
+map_move(-256*mapSize/2, -256*mapSize/2); // starts us off in the middle of the map
 			  </script>
 	  
 	  </table>

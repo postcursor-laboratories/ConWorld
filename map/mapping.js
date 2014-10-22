@@ -46,32 +46,13 @@ function drag_drag(e) {
     if (!drag_isDragging)   return;
     if (!e)	var e=window.event;
 
-    var targ = drag_getTarget(e);
-
     // get new position
     var x = coordX+e.clientX-clickInitialX;
     var y = coordY+e.clientY-clickInitialY;
 
-    // for boundary calculations.
-    var mapFrame = document.getElementById("mapFrame");
-    var mapTable = document.getElementById("mapTable");
-    var minX = -mapTable.clientWidth  + parseInt(mapFrame.style.width);
-    var minY = -mapTable.clientHeight + parseInt(mapFrame.style.height);
+    map_move(x,y);
 
-    // check boundaries
-    if (x > 0)	x = 0;
-    if (y > 0)	y = 0;
-    if (x < minX)	x = minX;
-    if (y < minY)	y = minY;
-
-    // move the actual map
-    targ.style.left = x+'px';
-    targ.style.top  = y+'px';
-    
-    // update metadata
-    map_updatePositionText(x,y);
-    
-    // return false so the browser doesn't derp about handling mouse events
+     // return false so the browser doesn't derp about handling mouse events
     return false;
 }
 
@@ -89,26 +70,69 @@ window.onload = function() {
 
 
 function tile_name(x, y){
-    console.log("tile_name("+x+","+y+")");
-
     if(x < 0 || x >= 2048) return 'invalid';
     if(y < 0 || y >= 2048) return 'invalid';
+
+    x = Math.floor(x)
+    y = Math.floor(y)
 
     var xval = ('0000'+x).slice(-4);
     var yval = ('0000'+y).slice(-4);
     return "tile-"+xval+"-"+yval;
 }
 
-function change_tile_loadedness(x,y,loaded){
+function change_tile_loadedness(x,y,load){
     var name = tile_name(x,y);
     var elem = document.getElementById(name);
-    console.log(elem);
-    var text = '<img src="map/' + (loaded ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
-    //var text = loaded ? '<img src="map/get_tile.py?n='+name+'" />' : '';
-    elem.innerHTML = text;
+    var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
+    var currLoaded = elem.attributes['currentlyLoaded'].value === 'Y';
+
+    if (currLoaded != load){
+	elem.innerHTML = text;
+	elem.attributes['currentlyLoaded'].value = load?'Y':'N';
+    }
 }
 
-function map_updatePositionText(x,y){
+function map_move(x,y){
+    // for boundary calculations.
+    var mapFrame = document.getElementById("mapFrame");
+    var mapTable = document.getElementById("mapTable");
+    var minX = -mapTable.clientWidth  + parseInt(mapFrame.style.width);
+    var minY = -mapTable.clientHeight + parseInt(mapFrame.style.height);
+
+    // check boundaries
+    if (x > 0)	x = 0;
+    if (y > 0)	y = 0;
+    if (x < minX)	x = minX;
+    if (y < minY)	y = minY;
+
+    // move the actual map
+    var targ = document.getElementById("mapTableHolder");
+    targ.style.left = x+'px';
+    targ.style.top  = y+'px';
+    
+    // update metadata
     document.getElementById("mapXPosition").innerHTML = "X: "+x;
     document.getElementById("mapYPosition").innerHTML = "Y: "+y;
+
+    // load or unload tiles (units in tiles, not pixels)
+    var radius_unload = 4;
+    var radius_load   = 2;
+
+    if(typeof map_move_lastMidTileX === 'undefined')	map_move_lastMidTileX = -1;
+    if(typeof map_move_lastMidTileY === 'undefined')	map_move_lastMidTileY = -1;
+
+    var midTileX = Math.floor(-x/256 + parseInt(mapFrame.style.width)/2/256);
+    var midTileY = Math.floor(-y/256 + parseInt(mapFrame.style.height)/2/256);
+
+    if (midTileX !== map_move_lastMidTileX || midTileY !== map_move_lastMidTileY){
+	for(var i=-radius_unload; i<radius_unload; i++)
+	    for(var j=-radius_unload; j<radius_unload; j++){
+		var load = i*i+j*j < radius_load*radius_load;
+		change_tile_loadedness(midTileX+i, midTileY+j, load);
+	    }
+    }
+
+    map_move_lastMidTileX = midTileX;
+    map_move_lastMidTileY = midTileY;
 }

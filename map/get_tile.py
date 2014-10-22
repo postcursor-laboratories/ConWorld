@@ -16,7 +16,7 @@ if __name__ == '__main__':
         exit(1)
 
     if not os.path.isfile(tile):
-        tile = "../globe.gif"
+        tile = "unexplored.png"
 
 #    with open(tile, "rb") as fin:
 #        sys.out.write(fin.read())
