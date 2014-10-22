@@ -23,7 +23,7 @@ class Tag:
         return self.get_tag()
     def get_tag(self):
         contents = Tag.__transform(self.content)
-        attrstr = ' '.join(['{}={}'.format(x[0], x[1]) for x in self.attrs.items()])
+        attrstr = ' '.join(['{}="{}"'.format(x[0], x[1]) for x in self.attrs.items()])
         name_attrs = self.tag_name
         if attrstr:
             name_attrs += ' ' + attrstr
@@ -50,7 +50,12 @@ def recursiveparse(node):
                 continue
             tags += recursiveparse(child)
         if not isinstance(node, bs4.BeautifulSoup):
-            tags = [maketag(node.name, content=tags)]
+            attrs = {}
+            for (attrname, attrval) in node.attrs.items():
+                if type(attrval) is list:
+                    attrval = ' '.join(attrval)
+                attrs[attrname] = attrval
+            tags = [maketag(node.name, content=tags, **attrs)]
     else:
         tags.append(TextTag(str(node)))
     return tags
