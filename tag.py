@@ -12,14 +12,14 @@ class Tag:
         elif type(x) is Tag:
             x = x.get_tag()
         elif isinstance(x, collections.Sequence):
-            x = ''.join([transform(o) for o in x])
+            x = ''.join([Tag.__transform(o) for o in x])
         return x
     def __init__(self, name, contents='', **kwargs):
         self.tag_name = name
         self.content = contents
         self.attrs = kwargs
     def get_tag(self):
-        contents = transform(self.contents)
+        contents = Tag.__transform(self.contents)
         attrstr = ' '.join(['{}={}'.format(x[0], x[1]) for x in self.attrs.iterkeys()])
         tag = '<{} {}>{}</{}>'.format(self.tag_name, attrstr, contents, self.tag_name)
         return tag
