@@ -26,17 +26,21 @@ if __name__ == '__main__':
         print()
         print(__doc__)
         raise SystemExit
+    
+    #weights = [.1, .1, .2, .3, .5, 1]
+    #weights = [0, 0, 0, 0, 1]
+
+    weights = [.05, .1, 0, 0, .4, 0, .8]
 
     if len(sys.argv) > 2:
         octaves = int(sys.argv[2])
     else:
-        octaves = 1
+        octaves = len(weights)
 
     if len(sys.argv) > 3:
         seed = int(sys.argv[3])
     else:
         seed = None
 
-    weights = [.1, .1, .2, .3, .5, 1]
     func = create(weights[:octaves], seed)
     toPNG(func, 1024, 1024).save(sys.argv[1])
