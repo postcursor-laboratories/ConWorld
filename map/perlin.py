@@ -195,6 +195,6 @@ def perlin_noise(seed, weights=[1]):
 		for i in range(len(weights)):
 			if weights[i]:
 				total += weights[i]*get_at_octave_index(x, y, i)
-		return total
+		return [total]
 
 	return get

@@ -14,7 +14,7 @@ def toPNG(func, xsize, ysize):
     for y in range(ysize):
         col = []
         for x in range(xsize):
-            col.append(func(x,y))
+            col.append(func(x,y)[0])
         pngdata.append(col)
 
     # L makes it greyscale
