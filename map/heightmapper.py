@@ -2,19 +2,12 @@
 
 import sys
 import png
-import random
-from noise import snoise2
+import perlin
 
-def create(octaves, seed=None):
-    # TODO: make the seed actually work!
-    if seed:
-        random.seed(seed)
-        #snoise.randomize()
-
-    freq = 16.0*octaves
-    def get(x,y):
-        return int(snoise2(x/freq, y/freq, octaves)*127.0 + 128.0)
-    return get
+def create(octave_weights, seed=None):
+    if not seed:
+        seed = 203840           # Keysmash of Grand Worldbuilding
+    return perlin.perlin_noise(seed, octave_weights)
 
 def toPNG(func, xsize, ysize):
     pngdata = []
@@ -43,6 +36,7 @@ if __name__ == '__main__':
         seed = int(sys.argv[3])
     else:
         seed = None
-    
-    func = create(octaves, seed)
-    toPNG(func, 256, 256).save(sys.argv[1])
+
+    weights = [.1, .1, .2, .3, .5, 1]
+    func = create(weights[:octaves], seed)
+    toPNG(func, 1024, 1024).save(sys.argv[1])
