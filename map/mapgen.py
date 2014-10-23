@@ -42,7 +42,6 @@ def transform_addAltitude(heightmap):
             ret = shift_pixel_towards_value([height]*3, color, shift)
 
         else:
-            #ret = [ height ]*3
             ret = shift_pixel_towards_value([height]*3, _color_grass, .25)
         return ret
 
