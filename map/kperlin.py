@@ -52,7 +52,7 @@ class Perlin(NoiseGenerator2D):
         self.define_inoise(seed)
     def define_inoise(self, seed):
         def noise(x, y):
-            n = x + y * 57 + seed
+            n = x + y * 2147483647 + seed
             random.seed(n)
             sign = random.randint(0, 1) == 1
             return (-1 if sign else 1) * random.random()
