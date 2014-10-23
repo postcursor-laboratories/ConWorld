@@ -25,16 +25,20 @@ class Tag:
         self.attrs = kwargs
     def __repr__(self):
         return self.get_tag()
-    def get_tag(self):
-        contents = Tag.__transform(self.content)
+    def wrapin(self, tag):
+        return tag.with_contents(self)
+    def with_contents(self, contents):
+        return maketag(self.tag_name, contents, **self.attrs)
+    def get_tag(self, tmpcontents=None):
+        contents = Tag.__transform(tmpcontents if tmpcontents else self.content)
         attrstr = ' '.join(['{}="{}"'.format(x[0], x[1]) for x in self.attrs.items()])
         name_attrs = self.tag_name
         if attrstr:
             name_attrs += ' ' + attrstr
         tag = '<{}>{}</{}>'.format(name_attrs, contents, self.tag_name)
         return tag
-    def print_tag(self):
-        print(self.get_tag())
+    def print_tag(self, tmpcontents=None):
+        print(self.get_tag(tmpcontents))
 class TextTag(Tag):
     def __init__(self, text):
         super().__init__(None, text)
