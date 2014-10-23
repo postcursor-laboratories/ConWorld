@@ -90,4 +90,4 @@ makerInstance = TagMaker()
 def maker():
     return makerInstance
 
-__all__ = ["Tag", "maker"]
+__all__ = ["Tag", "TextTag", "maketag", "maker"]
