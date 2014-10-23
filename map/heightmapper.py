@@ -2,19 +2,20 @@
 
 import sys
 import png
-import perlin
+import kperlin
 
 def create(octave_weights, seed=None):
     if not seed:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return perlin.perlin_noise(seed, octave_weights)
+    return kperlin.Perlin(seed, len(octave_weights), octave_weights).noise2
 
 def toPNG(func, xsize, ysize):
     pngdata = []
     for y in range(ysize):
         col = []
         for x in range(xsize):
-            col.append(func(x,y))
+            res = func(x, y)
+            col.append(127*res+128)
         pngdata.append(col)
 
     # L makes it greyscale
