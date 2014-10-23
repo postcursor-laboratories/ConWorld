@@ -8,8 +8,8 @@ import tag
 xml = tag.maker()
 
 head = xml.head()
-header_tags = (xml.title('ConWorld'))
-default_tags = (xml.link(rel='stylesheet', type='text/css', href='stylesheet.css'))
+header_tags = (xml.title('ConWorld'),)
+default_tags = (xml.link(rel='stylesheet', type='text/css', href='stylesheet.css'),)
 def with_default_tags(others):
     tags = list(default_tags)
     tags += others
