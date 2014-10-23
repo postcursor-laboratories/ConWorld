@@ -1,4 +1,7 @@
 from abc import *
+from numbers import Number
+from collections import Sequence
+import random
 
 def interpolate(a, b, x, xmin=0, xmax=1):
     return a * (xmax - x) + b * (x - xmin)
@@ -37,23 +40,32 @@ class NoiseGenerator2D:
         pass
 
 class Perlin(NoiseGenerator2D):
-    def __init__(self, octaves=1, persistance=1):
-        self.n = octave
-        self.p = persistance
+    def __init__(self, seed, octaves=1, persistence=1):
+        self.n = octaves
+        if isinstance(persistence, Number):
+            cache = persistence
+            persistence = lambda i: cache
+        elif isinstance(persistence, Sequence):
+            persistence = persistence.__getitem__
+        self.p = persistence
+        self.seed = seed
+        self.define_inoise(seed)
+    def define_inoise(self, seed):
         def noise(x, y):
-            n = x + y * 57
-            n = (n << 13) ^ n
-            return (1.0 - (n * (n * n *  15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0)
-        def snoise(x, y)
+            n = x + y * 57 + seed
+            random.seed(n)
+            sign = random.randint(0, 1) == 1
+            return (-1 if sign else 1) * random.random()
+        def snoise(x, y):
             corners = (noise(x - 1, y - 1) + noise(x + 1, y - 1) + noise(x - 1, y + 1) + noise(x + 1, y + 1)) / 16
             sides   = (noise(x - 1, y) + noise(x + 1, y) + noise(x, y - 1) + noise(x, y + 1)) /  8
             center  =  noise(x, y) / 4
             return corners + sides + center
-        def inoise(x, y)
+        def inoise(x, y):
             ix = int(x)
             fx = x - ix
             iy = int(y)
-            fy = y - fy
+            fy = y - iy
 
             v1 = snoise(ix, iy)
             v2 = snoise(ix + 1, iy)
@@ -62,9 +74,9 @@ class Perlin(NoiseGenerator2D):
 
             i1 = interpolate(v1 , v2 , fx)
             i2 = interpolate(v3 , v4 , fx)
-            return interpolate(i1 , i2 , ft)
+            return interpolate(i1 , i2 , fy)
         self.inoise = inoise
     def noise2(self, x, y):
-        return sum(self.inoise(x * i * 2) * self.p * i for i in range(self.n))
-           
-__all__ = ["Perlin"]
+        return sum(self.inoise(x * 2**i, y * 2**i) * self.p(i)**i for i in range(self.n))
+
+__all__ = ["NoiseGenerator2D", "Perlin"]
