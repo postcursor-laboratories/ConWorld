@@ -5,6 +5,11 @@ XML tags made Pythonic.
 import collections
 import bs4
 
+void = 'area, base, br, col, embed, hr, img, input, keygen, link, meta, param, source, track, wbr'.split(', ')
+
+def isvoid(tag):
+    return tag.tag_name in void
+
 class Tag:
     @staticmethod
     def __transform(x):
@@ -35,7 +40,11 @@ class Tag:
         name_attrs = self.tag_name
         if attrstr:
             name_attrs += ' ' + attrstr
-        tag = '<{}>{}</{}>'.format(name_attrs, contents, self.tag_name)
+        tag = None
+        if isvoid(self):
+            tag = '<' + name_attrs + ' />'
+        else:
+            tag = '<{}>{}</{}>'.format(name_attrs, contents, self.tag_name)
         return tag
     def print_tag(self, tmpcontents=None):
         print(self.get_tag(tmpcontents))
