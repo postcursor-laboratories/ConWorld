@@ -19,20 +19,14 @@ class NoiseGenerator2D:
         self.originy = 0
         self.noise = {}
     def __contains__(self, coords):
-        x = coords[X1]
-        y = coords[Y1]
-        xdict = self.noise.get(x)
-        if xdict and xdict.get(y):
-            return True
-        return False
+        return self.noise[coords]
     def __setgen(self, x, y, gen):
-        if not x in self.noise:
-            self.noise[x] = {}
-        self.noise[x][y] = gen
+        self.noise[(x, y)] = gen
         return gen
     def getnoise(self, x, y):
-        if (x, y) in self:
-            return self.noise[x][y]
+        loc = (x, y)
+        if loc in self:
+            return self.noise[loc]
         gen = noise2(x, y)
         return self.__setgen(x, y, gen)
     @abstractmethod
@@ -49,13 +43,18 @@ class Perlin(NoiseGenerator2D):
             persistence = persistence.__getitem__
         self.p = persistence
         self.seed = seed
+        self.rawnoise = {}
         self.define_inoise(seed)
     def define_inoise(self, seed):
+        self.rawnoise = {}
         def noise(x, y):
-            n = x + y * 2147483647 + seed
-            random.seed(n)
-            sign = random.randint(0, 1) == 1
-            return (-1 if sign else 1) * random.random()
+            loc = (x, y)
+            if loc not in self.rawnoise:
+                n = x + y * 2147483647 + seed
+                random.seed(n)
+                sign = random.randint(0, 1) == 1
+                self.rawnoise[loc] = (-1 if sign else 1) * random.random()
+            return self.rawnoise[loc]
         def snoise(x, y):
             corners = (noise(x - 1, y - 1) + noise(x + 1, y - 1) + noise(x - 1, y + 1) + noise(x + 1, y + 1)) / 16
             sides   = (noise(x - 1, y) + noise(x + 1, y) + noise(x, y - 1) + noise(x, y + 1)) /  8
