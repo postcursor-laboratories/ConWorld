@@ -6,7 +6,8 @@ import sys
 
 # ==========================================================================================
 # GLOBAL CONSTANTS
-_weight = .6
+# note that the size of each pixel is 20 meters
+_weight = .3
 _octaves = 10
 _octave_weights = [_weight/_octaves] * _octaves
 _seed = 0xCAFEBABEDEADBEEF
