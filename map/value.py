@@ -1,36 +1,60 @@
+import random
+import math
+
+def c_mul(a, b):
+    return eval(hex((long(a) * b) & 0xFFFFFFFF)[:-1])
+def hashtuplesafe(tup):
+    value = 0x345678
+    for item in tup:
+        value = c_mul(1000003, value) ^ hash(item)
+    value = value ^ len(self)
+    if value == -1:
+        value = -2
+    return value
 #------------------------------------------------------------------------------ 
 # Method 2 from http://lodev.org/cgtutor/randomnoise.html
-def value_noise(width, height, frequency=0.4, octaves=10.0):
+class ValueNoise:
     """
-    Generate dat value noise, boi
-
     frequency - A smaller number generates a more "zoomed-in" terrain with fewer details
     octaves - Smaller number generates more lakes, 0.4 and 10 gives a good result if 320*240 in 2 seconds
     """
-    def smooth_noise(x, y):
+    def __init__(self, frequency=0.4, octaves=10.0, seed=0):
+        self.frequency = frequency
+        self.octaves = octaves
+        self.seed = seed
+        self.random = random.Random()
+        self.noisemap = {}
+        self.resultmap = {}
+        self.xycmap = {}
+    def noise(self, x, y):
+        key = (x, y)
+        noise = self.noisemap
+        if key not in noise:
+            random.seed(hash(key))
+            noise[key] = random.randint(0, 1000) / 1000
+        return noise[key]
+    def smooth_noise(self, x, y):
         """Returns the average value of the 4 neighbors of (x, y) from the
            noise array."""
 
         fractX = x - int(x)
         fractY = y - int(y)
 
-        x1 = (int(x) + width) % width
-        y1 = (int(y) + height) % height
+        x1 = int(x)
+        y1 = int(y)
 
-        x2 = (x1 + width - 1) % width
-        y2 = (y1 + height - 1) % height
+        x2 = x1 - 1
+        y2 = y1 - 1
 
         #Bilinear interpolation http://en.wikipedia.org/wiki/Bilinear_interpolation
         value = 0.0
-        value += fractX       * fractY       * noise[y1][x1]
-        value += fractX       * (1 - fractY) * noise[y2][x1]
-        value += (1 - fractX) * fractY       * noise[y1][x2]
-        value += (1 - fractX) * (1 - fractY) * noise[y2][x2]
+        value += fractX       * fractY       * self.noise(y1, x1)
+        value += fractX       * (1 - fractY) * self.noise(y2, x1)
+        value += (1 - fractX) * fractY       * self.noise(y1, x2)
+        value += (1 - fractX) * (1 - fractY) * self.noise(y2, x2)
 
         return value
-
-
-    def turbulence(x, y, size):
+    def turbulence(self, x, y, size):
         """
         This function controls how far we zoom in/out of the noise array.
         The further zoomed in gives less detail and is more blurry.
@@ -40,35 +64,22 @@ def value_noise(width, height, frequency=0.4, octaves=10.0):
         initial_size = size
 
         while size >= 1:
-            value += smooth_noise(x / size, y / size) * size
-            size /= 2.0 #The zooming factor started at 16 here, and is divided through two each time. Keep doing this until the zooming factor is 1.
+            value += self.smooth_noise(x / size, y / size) * size
+            size /= 2.0 #The zooming factor started at 16 here, and is divided through two each time. Keep doing this until the zooming factor is 1
 
         return 128.0 * value / initial_size #The return value is normalized so that it'll be a number between 0 and 255
 
-    frequency = 0.4
-    octaves = 10.0
+    def generate(self, x, y):
+        """
+        Generate dat value noise, boi
+        """
 
-    #Generate a list with random noise between 0 and 1
-    noise = []
-    for y in range(0, height):
-        noise_row = []
-        for x in range(0, width):
-            noise_row.append(random.randint(0, 1000)/1000.0)
-        noise.append(noise_row)
+        key = (x, y)
 
+        result = self.resultmap
+        if key not in result:
+            result[key] = int(self.turbulence(x*self.frequency, y*self.frequency, self.octaves))
 
-    result = []
-    for y in range(0, height):
-        row = []
-        for x in range(0, width):
-            noise_smooth_turbulent = int(turbulence(x*frequency,y*frequency,octaves))
-            row.append(noise_smooth_turbulent)
-        result.append(row)
+        return (result[key],)
 
-    #Standardize the coordinates [x,y,z]
-    xy_and_height = []
-    for y, row in enumerate(result):
-        for x, c in enumerate(row):
-            xy_and_height.append((x,y,c))
-
-    return xy_and_height
+__all__ = ["ValueNoise"]
