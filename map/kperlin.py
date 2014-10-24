@@ -47,6 +47,8 @@ class Perlin(NoiseGenerator2D):
         self.define_inoise(seed)
     def define_inoise(self, seed):
         self.rawnoise = {}
+        self.rawsnoise = {}
+        self.rawinoise = {}
         def noise(x, y):
             loc = (x, y)
             if loc not in self.rawnoise:
@@ -56,24 +58,30 @@ class Perlin(NoiseGenerator2D):
                 self.rawnoise[loc] = (-1 if sign else 1) * random.random()
             return self.rawnoise[loc]
         def snoise(x, y):
-            corners = (noise(x - 1, y - 1) + noise(x + 1, y - 1) + noise(x - 1, y + 1) + noise(x + 1, y + 1)) / 16
-            sides   = (noise(x - 1, y) + noise(x + 1, y) + noise(x, y - 1) + noise(x, y + 1)) /  8
-            center  =  noise(x, y) / 4
-            return corners + sides + center
+            loc = (x, y)
+            if loc not in self.rawsnoise:
+                corners = (noise(x - 1, y - 1) + noise(x + 1, y - 1) + noise(x - 1, y + 1) + noise(x + 1, y + 1)) / 16
+                sides   = (noise(x - 1, y) + noise(x + 1, y) + noise(x, y - 1) + noise(x, y + 1)) /  8
+                center  =  noise(x, y) / 4
+                self.rawsnoise[loc] = corners + sides + center
+            return self.rawsnoise[loc]
         def inoise(x, y):
-            ix = int(x)
-            fx = x - ix
-            iy = int(y)
-            fy = y - iy
+            loc = (x, y)
+            if loc not in self.rawinoise:
+                ix = int(x)
+                fx = x - ix
+                iy = int(y)
+                fy = y - iy
 
-            v1 = snoise(ix, iy)
-            v2 = snoise(ix + 1, iy)
-            v3 = snoise(ix, iy + 1)
-            v4 = snoise(ix + 1, iy + 1)
+                v1 = snoise(ix, iy)
+                v2 = snoise(ix + 1, iy)
+                v3 = snoise(ix, iy + 1)
+                v4 = snoise(ix + 1, iy + 1)
 
-            i1 = interpolate(v1 , v2 , fx)
-            i2 = interpolate(v3 , v4 , fx)
-            return interpolate(i1 , i2 , fy)
+                i1 = interpolate(v1 , v2 , fx)
+                i2 = interpolate(v3 , v4 , fx)
+                self.rawinoise[loc] = interpolate(i1 , i2 , fy)
+            return self.rawinoise[loc]
         self.inoise = inoise
     def noise2(self, x, y):
         return sum(self.inoise(x * 2**i, y * 2**i) * self.p(i)**i for i in range(self.n))
