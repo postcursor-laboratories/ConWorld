@@ -7,12 +7,22 @@ import sys
 # ==========================================================================================
 # GLOBAL CONSTANTS
 # note that the size of each pixel is 20 meters
-_weight = .3
-_octaves = 10
-_octave_weights = [_weight/_octaves] * _octaves
+base = .3
+count = 10
+freqs = []
+amps = []
+copy = count
+done = 0
+while done < count:
+    freqs.append(1/copy)
+    amps.append(copy)
+    copy /= 2.0
+    done += 1
+del copy
+del done
 _seed = 0xCAFEBABEDEADBEEF
 _tilesize = 256
-_heightmapper = heightmapper.create(_octave_weights, _seed)
+_heightmapper = heightmapper.create(freqs, amps, count, _seed)
 
 _alt_sea   = 128
 _alt_beach = _alt_sea+20
