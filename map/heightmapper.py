@@ -7,7 +7,7 @@ import kperlin
 def create(octave_weights, seed=None):
     if not seed:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return kperlin.Perlin(seed, len(octave_weights), octave_weights).noise2
+    return kperlin.Perlin(seed, len(octave_weights), octave_weights).getnoise
 
 def toPNG(func, xsize, ysize):
     pngdata = []
