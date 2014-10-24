@@ -15,11 +15,10 @@ if __name__ == '__main__':
     except KeyError:
         exit(1)
 
-    if not os.path.isfile(tile):
-        tile = "unexplored.png"
+    tile = "tiles/"+tile
 
-#    with open(tile, "rb") as fin:
-#        sys.out.write(fin.read())
+    if not os.path.isfile(tile):
+        tile = "tiles/unexplored.png"
 
     # Redirect
     print("Location: " + tile)
