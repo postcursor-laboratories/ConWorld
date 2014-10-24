@@ -41,6 +41,9 @@ class Perlin(NoiseGenerator2D):
             persistence = lambda i: cache
         elif isinstance(persistence, Sequence):
             persistence = persistence.__getitem__
+        s = sum(persistence(i) for i in range(octaves))
+        if s > 1:
+            raise ValueError('persistence values for {} octaves cannot be greater than one, it is {}'.format(octaves, s))
         self.p = persistence
         self.seed = seed
         self.rawnoise = {}
@@ -52,10 +55,9 @@ class Perlin(NoiseGenerator2D):
         def noise(x, y):
             loc = (x, y)
             if loc not in self.rawnoise:
-                n = x + y * 2147483647 + seed
-                random.seed(n)
-                sign = random.randint(0, 1) == 1
-                self.rawnoise[loc] = (-1 if sign else 1) * random.random()
+                n = x + y * 0x7fffffff + seed
+                n = (n << 13) ^ n
+                self.rawnoise[loc] = (1.0 - ((n * (n * n *  15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0)
             return self.rawnoise[loc]
         def snoise(x, y):
             loc = (x, y)
@@ -84,9 +86,6 @@ class Perlin(NoiseGenerator2D):
             return self.rawinoise[loc]
         self.inoise = inoise
     def noise2(self, x, y):
-        persist_out = [self.p(i) for i in range(self.n)]
-        persist_sum = sum(persist_out)
-        persist_balanced = [i/persist_sum for i in persist_out]
-        return sum(self.inoise(x * 2**i, y * 2**i) * persist_balanced[i]**i for i in range(self.n))
+        return sum(self.inoise(x * 2**i, y * 2**i) * self.p(i)**i for i in range(self.n))
 
 __all__ = ["NoiseGenerator2D", "Perlin"]
