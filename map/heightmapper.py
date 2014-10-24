@@ -2,12 +2,12 @@
 
 import sys
 import png
-import perlin
+import value
 
 def create(octave_weights, seed=None):
     if seed == None:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return perlin.perlin_noise(seed, octave_weights)
+    return value.ValueNoise(octaves=len(octave_weights), seed=seed).generate
 
 def toPNG(func, xsize, ysize):
     pngdata = []
