@@ -86,6 +86,6 @@ class Perlin(NoiseGenerator2D):
             return self.rawinoise[loc]
         self.inoise = inoise
     def noise2(self, x, y):
-        return sum(self.inoise(x * 2**i, y * 2**i) * self.p(i)**i for i in range(self.n))
+        return sum(self.inoise(x * 2**i, y * 2**i) * self.p(i)**i for i in range(self.n) if self.p(i) != 0)
 
 __all__ = ["NoiseGenerator2D", "Perlin"]
