@@ -7,7 +7,7 @@ import value
 def create(octave_weights, seed=None):
     if seed == None:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return value.ValueNoise(octaves=len(octave_weights), seed=seed).generate
+    return value.ValueNoise(.01, octaves=len(octave_weights), seed=seed).generate
 
 def toPNG(func, xsize, ysize):
     pngdata = []
