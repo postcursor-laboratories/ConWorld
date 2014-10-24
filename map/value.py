@@ -27,7 +27,7 @@ class ValueNoise:
         self.resultmap = {}
         self.xycmap = {}
     def noise(self, x, y):
-        key = (x, y)
+        key = (x, y, self.seed)
         noise = self.noisemap
         if key not in noise:
             random.seed(hashtuplesafe((hashtuplesafe(key), hashtuplesafe(key))))
@@ -74,7 +74,7 @@ class ValueNoise:
         Generate dat value noise, boi
         """
 
-        key = (x, y)
+        key = (x, y, self.seed)
 
         result = self.resultmap
         if key not in result:
