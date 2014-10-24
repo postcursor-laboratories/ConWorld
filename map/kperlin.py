@@ -19,16 +19,15 @@ class NoiseGenerator2D:
         self.originy = 0
         self.noise = {}
     def __contains__(self, coords):
-        return self.noise[coords]
+        return self.noise.get(coords)
     def __setgen(self, x, y, gen):
         self.noise[(x, y)] = gen
         return gen
     def getnoise(self, x, y):
         loc = (x, y)
-        if loc in self:
-            return self.noise[loc]
-        gen = noise2(x, y)
-        return self.__setgen(x, y, gen)
+        if loc not in self:
+            self.noise[loc] = self.noise2(x, y)
+        return self.noise[loc]
     @abstractmethod
     def noise2(self, x, y):
         pass
