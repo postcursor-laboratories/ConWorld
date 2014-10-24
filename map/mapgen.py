@@ -6,7 +6,7 @@ import sys
 
 # ==========================================================================================
 # GLOBAL CONSTANTS
-_octave_weights = [.05, .1, 0, 0, .4, 0, .8, 0, 0, 0, 0, 0, 0, 0, 0, 2]
+_octave_weights = [.05, .1, 0, 0, .4, 0, .2, 0, 0, 0, 0, 0, 0, 0, 0, .1]
 _seed = 203840
 _tilesize = 256
 _heightmapper = heightmapper.create(_octave_weights, _seed)
