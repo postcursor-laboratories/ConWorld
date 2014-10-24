@@ -31,6 +31,7 @@ class ValueNoise:
         noise = self.noisemap
         if key not in noise:
             random.seed(hashtuplesafe((hashtuplesafe(key), hashtuplesafe(key))))
+            random.seed(random.randint(0, 0xFFFFFFFF))
             noise[key] = random.randint(0, 1000) / 1000
         return noise[key]
     def smooth_noise(self, x, y):
