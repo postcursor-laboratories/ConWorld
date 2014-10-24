@@ -26,7 +26,7 @@ _color_grass = [ 0x00, 0x99, 0x33 ]
 def transform_addAltitude(heightmap):
     """Adds a color profile and markers to indicate altitude"""
     def transform(x,y):
-        height = heightmap(x,y)#[0]
+        height = heightmap(x,y)[0]
 
         if height <= _alt_sea:
             ret = shift_pixel_towards_value([height]*3, _color_sea, .5)
