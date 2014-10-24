@@ -6,12 +6,14 @@ import sys
 
 # ==========================================================================================
 # GLOBAL CONSTANTS
-_octave_weights = [(1/2)**(i+1) for i in range(6)]
-_seed = 203840
+_weight = .6
+_octaves = 10
+_octave_weights = [_weight/_octaves] * _octaves
+_seed = 0xCAFEBABEDEADBEEF
 _tilesize = 256
 _heightmapper = heightmapper.create(_octave_weights, _seed)
 
-_alt_sea   = 64
+_alt_sea   = 128
 _alt_beach = _alt_sea+20
 _alt_snow  = 200
 
