@@ -7,7 +7,8 @@ import kperlin
 def create(octave_weights, seed=None):
     if not seed:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return kperlin.Perlin(seed, len(octave_weights), octave_weights).getnoise
+    basefunction = kperlin.Perlin(seed, len(octave_weights), octave_weights).getnoise
+    return lambda x, y: 127 * basefunction(x, y) + 128
 
 def toPNG(func, xsize, ysize):
     pngdata = []
@@ -15,7 +16,7 @@ def toPNG(func, xsize, ysize):
         col = []
         for x in range(xsize):
             res = func(x, y)
-            col.append(127*res+128)
+            col.append(res)
         pngdata.append(col)
 
     # L makes it greyscale
