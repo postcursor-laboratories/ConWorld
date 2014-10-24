@@ -34,6 +34,7 @@ class NoiseGenerator2D:
 
 class Perlin(NoiseGenerator2D):
     def __init__(self, seed, octaves=1, persistence=1):
+        super().__init__()
         self.n = octaves
         if isinstance(persistence, Number):
             cache = persistence
