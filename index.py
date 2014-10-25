@@ -6,7 +6,7 @@ def print_content():
     #print('<h3><i><u><b>content approaching at rapid speeds!!</b></u></i></h3>')
     print('<img src="CONTENT.gif" />')
     conlib.br.print_tag()
-    print_shitty_globe()
+    conlib.print_shitty_globe()
     print('</th></tr></table>')
 
 if __name__ == '__main__':
