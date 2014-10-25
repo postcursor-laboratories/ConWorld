@@ -1,4 +1,5 @@
 *.py~
 *.pyc
 __pycache__/
+webhooks/
 
