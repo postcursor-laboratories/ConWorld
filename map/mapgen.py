@@ -6,6 +6,7 @@ import sys
 
 # ==========================================================================================
 # GLOBAL CONSTANTS
+
 # note that the size of each pixel is 20 meters
 base = .4
 count = 15
@@ -81,7 +82,7 @@ def generate_tile(tilex, tiley):
     createPNG(mp, "tile-%04d-%04d.png" % (tilex, tiley))
     
 
-def createPNG(pixelfunc, filename):
+def createPNG(pixelfunc, filename, size):
     """Saves a PNG file as FILENAME, where that PNG is generated with each pixel being
     the output of PIXELFUNC(x,y). PIXELFUNC should be a pure function that returns the
     value at one point.
@@ -107,9 +108,9 @@ def createPNG(pixelfunc, filename):
 
     # pngdata is a 2D array; 3D not yet supported in png
     pngdata = []
-    for y in range(_tilesize):
+    for y in range(size):
         col = []
-        for x in range(_tilesize):
+        for x in range(size):
             col += pixelfunc(x,y)
         pngdata.append(col)
 
