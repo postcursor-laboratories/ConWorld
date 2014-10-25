@@ -7,17 +7,19 @@ class DataMap():
     def __init__(self, name):
         self.name = name
 
-    def generateTile(self, tileX, tileY, heightmap, size=256):
+    def generate_tile(self, tileX, tileY, heightmap, size=256):
         pass
     
-    def loadTile(self, x,y):
-        """Loads a tile from given coordinates"""
+    def load_tile(self, x,y):
+        """Loads a tile from given coordinates
+        THROWS file not found gloop if there isn't a file. use tile_exists()
+        to check."""
         f = open(os.path.join("data", self.name, str(x) + "-" + str(y) + ".data"), 'rb')
         tile = pickle.load(f)
         f.close()
         return tile
 
-    def saveTile(self, tile,x,y):
+    def save_tile(self, tile,x,y):
         """Saves a tile as a pickled data file"""
         path = os.path.join(os.path.dirname(__file__), "data", self.name)
         if not os.path.exists(path):
@@ -32,5 +34,4 @@ for i in range(255**2):
     tile += [i]
 
 d = DataMap("test")
-d.saveTile(tile, 0,0)
 d.loadTile(0,0)
