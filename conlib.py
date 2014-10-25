@@ -27,7 +27,7 @@ def print_section_head(tag_set=default_tags):
 
 def write_status(code, exitparams=(False, 0)):
     print('Status: ' + code)
-    if exitparams and exitparams[0]:
+    if exitparams and ((not exitparams.__getitem__) or exitparams[0]):
         end_headers()
         sys.exit(exitparams[1] if len(exitparams) > 1 else 0)
 
