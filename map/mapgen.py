@@ -7,14 +7,14 @@ import sys
 # ==========================================================================================
 # GLOBAL CONSTANTS
 # note that the size of each pixel is 20 meters
-base = .3
-count = 10
+base = .4
+count = 15
 freqs = []
 amps = []
 copy = count
 done = 0
 while done < count:
-    freqs.append(1/copy)
+    freqs.append(base/copy)
     amps.append(copy)
     copy /= 2.0
     done += 1
