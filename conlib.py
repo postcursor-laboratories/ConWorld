@@ -29,7 +29,7 @@ def write_status(code, exitparams=(False, 0)):
     print('Status: ' + str(code))
     if exitparams and ((not hasattr(exitparams, '__getitem__')) or exitparams[0]):
         end_headers()
-        sys.exit(exitparams[1] if (not hasattr(exitparams, '__getitem__')) or len(exitparams) > 1 else 0)
+        sys.exit(exitparams[1] if hasattr(exitparams, '__len__') and len(exitparams) > 1 else 0)
 
 def print_header():
     # THE TITLE
