@@ -23,14 +23,14 @@ class DataMap():
         if not os.path.exists(path):
             os.makedirs(path)
         f = open(os.path.join(os.path.dirname(__file__), "data", self.name, (str(x) + "-" + str(y)))+".data", 'wb')
-        pickle.dump(tile, f, 0)
+        pickle.dump(tile, f, 2)
         f.close()
 
 ##DEBUG
 tile = []
-for i in range(1000):
+for i in range(255**2):
     tile += [i]
 
 d = DataMap("test")
 d.saveTile(tile, 0,0)
-print(d.loadTile(0,0))
+d.loadTile(0,0)
