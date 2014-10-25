@@ -8,7 +8,19 @@ class DataMap():
         self.name = name
 
     def generate_tile(self, tileX, tileY, heightmap, size=256):
-        pass
+        """This is the main part of a DataMap and will be overwritten by most superclasses. Returns tile and saves tile to file."""
+        tile = []
+        for y in range(size):
+            row = []
+            for x in range(size):
+                row += [x+y]
+            tile += [row]
+        self.save_tile(tile, tileX, tileY)
+        return tile
+
+    def tile_exists(self, x,y):
+        """returns true iff file with name exists. TODO make it so you can't mess it up with a fake file."""
+        return os.path.exists(os.path.join("data", self.name, str(x) + "-" + str(y) + ".data"))
     
     def load_tile(self, x,y):
         """Loads a tile from given coordinates
@@ -34,4 +46,6 @@ for i in range(255**2):
     tile += [i]
 
 d = DataMap("test")
-d.loadTile(0,0)
+d.generate_tile(0,0,0,256)
+print(d.tile_exists(0,0))
+print(d.load_tile(0,0)[50][50])
