@@ -25,6 +25,12 @@ def print_section_head(tag_set=default_tags):
     tags += header_tags
     head.print_tag(tag_set)
 
+def write_status(code, exitparams=(False, 0)):
+    print('Status: ' + code)
+    if exitparams and exitparams[0]:
+        end_headers()
+        exit(exitparams[1] if len(exitparams) > 1 else 0)
+
 def print_header():
     # THE TITLE
     site_title.print_tag()
@@ -75,4 +81,4 @@ def write_page(content_printer, extra_header_tags=default_tags):
     print('</body></html>')
 
 if __name__ == '__main__':
-    main(print_content)
+    write_page(print_content)
