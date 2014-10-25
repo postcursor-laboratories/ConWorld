@@ -8,14 +8,13 @@ class DataMap():
         self.name = name
 
     def generate_tile(self, tileX, tileY, heightmap, size=256):
-        """This is the main part of a DataMap and will be overwritten by most superclasses. Returns tile and saves tile to file."""
-        tile = []
+        """This is the main part of a DataMap and will be overwritten by most superclasses.
+        Generating a tile should effect at most the tiles 2 away from it."""
+        tile = Tile(tileX, tileY, self, size)
         for y in range(size):
-            row = []
             for x in range(size):
-                row += [x+y]
-            tile += [row]
-        self.save_tile(tile, tileX, tileY)
+                tile.map[y][x] = x+y
+        tile.save()
         return tile
 
     def tile_exists(self, x,y):
@@ -39,6 +38,36 @@ class DataMap():
         f = open(os.path.join(os.path.dirname(__file__), "data", self.name, (str(x) + "-" + str(y)))+".data", 'wb')
         pickle.dump(tile, f, 2)
         f.close()
+
+class Tile():
+    """Stores a 2d array of... anything, I guess. Also holds it's x, y, and status of generation."""
+    def __init__(self, x, y, parent, size = 256):
+        self._x = x
+        self._y = y
+        self.size = size
+        self.map = []
+        for i in range(size):
+            self.map += [[]]
+            for j in range(size):
+                self.map[i] += [0]
+        self.parent = parent
+        
+        self._state = 0 #0: completely ungenerated.
+                        #1: has some generation but has not generated itself yet. eg rivers flow in, but no springs
+                        #2: has generated itself but some tiles may still modify it.
+                        #3: completely defined, all tiles around it cannot modify it anymore.
+
+    def save(self):
+        """Saves this tile as a pickled data file"""
+        path = os.path.join(os.path.dirname(__file__), "data", self.parent.name)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        f = open(os.path.join(os.path.dirname(__file__), "data", self.parent.name, (str(self._x) + "-" + str(self._y)))+".data", 'wb')
+        pickle.dump(self.map, f, 2)
+        f.close()
+
+    
+    
 
 ##DEBUG
 tile = []
