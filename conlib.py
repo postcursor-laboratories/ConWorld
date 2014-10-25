@@ -59,7 +59,7 @@ def print_shitty_globe():
 end_headers = print
 
 # ================================================================ The page starts getting printed
-def main(content_printer, extra_header_tags=default_tags):
+def write_page(content_printer, extra_header_tags=default_tags):
     print('Content-type: text/html')
     end_headers()
     print('<html>')

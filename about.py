@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 
-import index
+import conlib
+import tag
 
-def print_content():
-    print("""<p>
-ConWorld is a game based on <a href="http://slatestarcodex.com/2013/04/15/things-i-learned-by-spending-five-thousand-years-in-an-alternate-universe/">this random blog post.</a>
-<br />
-Live in fear and appreciate the fine majesty of this beautious concoction.
-</p>
-""")
+xml = tag.maker()
+
+def generate_content():
+    link = 'http://slatestarcodex.com/2013/04/15/things-i-learned-by-spending-five-thousand-years-in-an-alternate-universe'
+    text1 = (tag.TextTag('ConWorld is a game based on '), xml.a(href=link, 'this random blog post.'))
+    text2 = tag.TextTag('Live in fear and appreciate the fine majesty of this beautious concoction.')
+    gen = xml.p((text1, xml.br(), text2))
+
+content = generate_content()
 
 if __name__ == '__main__':
-    index.main(print_content)
+    conlib.write_page(content.print_tag)
