@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, os, urllib
+import cgi, os, urllib, sys
 import cgitb
 cgitb.enable()
 import tag
@@ -29,7 +29,7 @@ def write_status(code, exitparams=(False, 0)):
     print('Status: ' + code)
     if exitparams and exitparams[0]:
         end_headers()
-        exit(exitparams[1] if len(exitparams) > 1 else 0)
+        sys.exit(exitparams[1] if len(exitparams) > 1 else 0)
 
 def print_header():
     # THE TITLE
