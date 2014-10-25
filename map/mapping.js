@@ -3,30 +3,29 @@
 
 function drag_getTarget(e){
     // IE uses srcElement, sanity uses target
-    var targ = e.target ? e.target : e.srcElement;
+    //var targ = e.target ? e.target : e.srcElement;
+
+    // it was the above because we were dragging images; here, we want to drag a full div
+    var targ = document.getElementById("mapTableHolder");
     return targ;
 }
 
 function drag_init(e) {
     //console.log("drag_init("+e+")");
-
+    
     // determine event object
-    if (!e) {
-        var e = window.event;
-    }
+    if (!e)
+	var e = window.event;
 
     var targ = drag_getTarget(e);
-    if (targ.className != 'draggable') {
-	return
+    if (targ.className != 'draggable'){
+	return;
     }
 
     // calculate event X, Y coordinates
     clickInitialX = e.clientX;
     clickInitialY = e.clientY;
 
-    //console.log(targ);
-    //console.log(targ.style);
-    //console.log("LEFT: "+targ.style.left);
     // assign default values for top and left properties
     if(!targ.style.left) { targ.style.left = '0px'};
     if(!targ.style.top)  { targ.style.top  = '0px'};
@@ -37,35 +36,24 @@ function drag_init(e) {
     drag_isDragging = true;
 
     // move element
-    document.onmousemove=drag_drag;
+    document.getElementById("mapTableHolder").onmousemove=drag_drag;
     return false;
 }
 
 function drag_drag(e) {
     //console.log("drag_drag("+e+")");
 
-    if (!drag_isDragging) {return};
-    if (!e) {
-	var e=window.event
-    }
+    if (!drag_isDragging)   return;
+    if (!e)	var e=window.event;
 
-    var targ = drag_getTarget(e);
+    // get new position
+    var x = coordX+e.clientX-clickInitialX;
+    var y = coordY+e.clientY-clickInitialY;
 
-    var shouldMove = true;
-    /* // TODO: boundary conditions
-    if(coordX < 0 && clickInitialX < 0)
-	shouldMove = true;
-    if(targ.height + clickInitialY > 0)
-	shouldMove = true;
-    */
+    map_move(x,y);
 
-    // move element
-    if(shouldMove){
-	targ.style.left = coordX+e.clientX-clickInitialX+'px';
-	targ.style.top  = coordY+e.clientY-clickInitialY+'px';
-	//targ.style.zoom += e.scroll;
-	return false;
-    }
+     // return false so the browser doesn't derp about handling mouse events
+    return false;
 }
 
 function drag_stop() {
@@ -80,19 +68,94 @@ window.onload = function() {
 
 // ====================================================================== end dragging code
 
+
 function tile_name(x, y){
     if(x < 0 || x >= 2048) return 'invalid';
     if(y < 0 || y >= 2048) return 'invalid';
+
+    x = Math.floor(x)
+    y = Math.floor(y)
 
     var xval = ('0000'+x).slice(-4);
     var yval = ('0000'+y).slice(-4);
     return "tile-"+xval+"-"+yval;
 }
 
-function change_tile_loadedness(x,y,loaded){
+function change_tile_loadedness(x,y,load){
     var name = tile_name(x,y);
     var elem = document.getElementById(name);
-    console.log(elem);
-    var text = loaded ? '<img src="map/'+name+'.png" />' : '';
-    elem.innerHTML = text;
+
+    if (!elem)
+	console.log("Couldn't get elem "+name+":", elem);
+
+    var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
+    var currLoaded = elem.attributes['currentlyLoaded'].value === 'Y';
+
+    if (currLoaded != load){
+	elem.innerHTML = text;
+	elem.attributes['currentlyLoaded'].value = load?'Y':'N';
+    }
+}
+
+function map_move(x,y){
+    // for boundary calculations.
+    var mapFrame = document.getElementById("mapFrame");
+    var mapTable = document.getElementById("mapTable");
+    var minX = -mapTable.clientWidth  + parseInt(mapFrame.style.width);
+    var minY = -mapTable.clientHeight + parseInt(mapFrame.style.height);
+
+    // check boundaries
+    if (x > 0)	x = 0;
+    if (y > 0)	y = 0;
+    if (x < minX)	x = minX;
+    if (y < minY)	y = minY;
+
+    // -----------------------------------------------------------------------------------
+    // move the actual map
+    var targ = document.getElementById("mapTableHolder");
+    targ.style.left = x+'px';
+    targ.style.top  = y+'px';
+    
+    // -----------------------------------------------------------------------------------
+    // load or unload tiles (units in tiles, not pixels)
+    var radius_unload = 4;
+    var radius_load   = 2;
+
+    if(typeof map_move_lastMidTileX === 'undefined')	map_move_lastMidTileX = -1;
+    if(typeof map_move_lastMidTileY === 'undefined')	map_move_lastMidTileY = -1;
+
+    var midTileX = Math.floor(-x/256 + parseInt(mapFrame.style.width)/2/256);
+    var midTileY = Math.floor(-y/256 + parseInt(mapFrame.style.height)/2/256);
+
+    if (midTileX !== map_move_lastMidTileX || midTileY !== map_move_lastMidTileY){
+	for(var i=-radius_unload; i<radius_unload; i++)
+	    for(var j=-radius_unload; j<radius_unload; j++){
+		if (midTileX+i < 0)	continue;
+		if (midTileY+j < 0)	continue;
+		if (midTileX+i >= mapSize)	continue;
+		if (midTileY+j >= mapSize)	continue;
+
+		var load = i*i+j*j < radius_load*radius_load;
+		change_tile_loadedness(midTileX+i, midTileY+j, load);
+	    }
+    }
+
+    map_move_lastMidTileX = midTileX;
+    map_move_lastMidTileY = midTileY;
+
+    // -----------------------------------------------------------------------------------
+    // update metadata
+    
+    var offsetX = -x/256 + parseInt(mapFrame.style.width) /2/256 - mapSize/2;
+    var offsetY = -y/256 + parseInt(mapFrame.style.height)/2/256 - mapSize/2;
+    offsetX = Math.floor(offsetX*100)/100;
+    offsetY = Math.floor(offsetY*100)/100;
+
+    // km? Some invented unit? Furlong-wheelbarrows per square sharkfin? Who knows??
+    var unit = " tiles "; //"<sup>T</sup>";	// "&deg;"
+    offsetX = Math.abs(offsetX)+unit+(offsetX>=0 ? "East"  : "West");
+    offsetY = Math.abs(offsetY)+unit+(offsetY>=0 ? "South" : "North");
+
+    var position = "<pre>"+offsetY+", "+offsetX+"</pre>";
+    document.getElementById("mapPosition").innerHTML = position;
 }

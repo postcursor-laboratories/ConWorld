@@ -1,15 +1,10 @@
 <!-- Note that this is printed from ../map.py, so paths should include this dir -->
 
+
 <style type="text/css">
 .draggable{
 	position:relative;
 	cursor: move;
-}
-
-#mapFrame{
-	width: 1000px;
-	height: 700px;
-	background-color: darkgrey;
 }
 
 #mapTable{
@@ -18,32 +13,48 @@
 	padding: 0;
 }
 
-.mapTableEntry{
-	width: 64px;
-	height: 64px;
+.mapTableEntry > img {
+	width: 256px;
+	height: 256px;
 }
 </style>
+
 <script src="map/mapping.js"></script>
 
-<table border=4><tr><th style="overflow: hidden;">
-<div id="mapFrame">
-  
-<!--<img id='mapImage' src='map/someRandomMap.jpg' class='draggable' style='top:-500px;left:-500px;zoom=.5' />-->
-<table id="mapTable" class="draggable">
+<table border=4 style="background-color: lightgrey;">
+  <!-- info on the map; if you change the number of items, change the colspan in the next row -->
+  <tr>
+    <th id="mapName">The Land of Shererereroth.. or.. something</th>
+    <th id="mapPosition"></th>
+    <th id="mapZoomLevel">Zoom: 1x</th>
+  </tr>
 
-<!-- Create the table that holds our map. Note that by default no tiles are loaded. -->
-<script type="text/javascript">
-for(var x=0; x<15; x++){
+  <tr>
+    <td colspan=3 style="overflow: hidden;">
+      <div id="mapFrame" style="width: 1000px; height: 700px; background-color: darkgrey;">
+	<div id="mapTableHolder" class="draggable">
+	  <!--<img id='mapImage' src='map/someRandomMap.jpg' class='draggable' style='top:-500px;left:-500px;zoom=.5' />-->
+	  <table id="mapTable" cellspacing="0" cellpadding="0">
+	  
+	    <!-- Create the table that holds our map. Note that by default no tiles are loaded. -->
+	    <script type="text/javascript">
+mapSize = 32;
+for(var y=0; y<mapSize; y++){
 	document.write('<tr>');
- 	for(var y=0; y<15; y++){
+ 	for(var x=0; x<mapSize; x++){
  		var name = tile_name(x,y);
- 		document.write('<td><div class=".mapTableEntry" id="'+name+'"></div></td>');
+		document.write('<td><div class="mapTableEntry" id="'+name+'" currentlyLoaded="N"><img src="map/unloaded.png" /></div></td>');
 	}
 	document.write('</tr>');
 }
-</script>
 
+map_move(-256*mapSize/2, -256*mapSize/2); // starts us off in the middle of the map
+			  </script>
+	  
+	  </table>
+	</div>
+      </div>
+    </td>
+  </tr>
 </table>
-</div>
-</th></tr></table>
 
