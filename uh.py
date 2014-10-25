@@ -3,4 +3,4 @@
 import conlib
 
 if __name__ == '__main__':
-    conlib.write_page(lambda: 'uh.')
+    conlib.write_page(lambda: print('uh.'))
