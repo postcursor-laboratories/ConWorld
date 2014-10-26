@@ -1,6 +1,5 @@
 <!-- Note that this is printed from ../map.py, so paths should include this dir -->
 
-
 <style type="text/css">
 .draggable{
 	position:relative;
@@ -19,7 +18,8 @@
 }
 </style>
 
-<script src="map/mapping.js"></script>
+<script src="map/map.js"></script>
+<script src="map/raphael.js"></script>
 
 <table border=4 style="background-color: lightgrey;">
   <!-- info on the map; if you change the number of items, change the colspan in the next row -->
@@ -32,27 +32,21 @@
   <tr>
     <td colspan=3 style="overflow: hidden;">
       <div id="mapFrame" style="width: 1000px; height: 700px; background-color: darkgrey;">
-	<div id="mapTableHolder" class="draggable">
-	  <!--<img id='mapImage' src='map/someRandomMap.jpg' class='draggable' style='top:-500px;left:-500px;zoom=.5' />-->
-	  <table id="mapTable" cellspacing="0" cellpadding="0">
-	  
-	    <!-- Create the table that holds our map. Note that by default no tiles are loaded. -->
-	    <script type="text/javascript">
-mapSize = 32;
-for(var y=0; y<mapSize; y++){
-	document.write('<tr>');
- 	for(var x=0; x<mapSize; x++){
- 		var name = tile_name(x,y);
-		document.write('<td><div class="mapTableEntry" id="'+name+'" currentlyLoaded="N"><img src="map/unloaded.png" /></div></td>');
-	}
-	document.write('</tr>');
-}
 
-map_move(-256*mapSize/2, -256*mapSize/2); // starts us off in the middle of the map
-			  </script>
-	  
-	  </table>
-	</div>
+      <!-- Now handled by raphael in map.js
+	<canvas id="canvas">
+	  <p>Your browser doesn't support the HTML canvas element.
+	  This is probably because you're using Internet Explorer (in particular, a version
+	  less than or equal to 8).</p>
+	  <p>Don't worry, though! You can still view the map. You just have to install a fix for Internet Explorer:
+	    <ul>
+	      <li><a href="https://www.google.com/chrome/browser/">Chrome</a></li>
+	      <li><a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a></li>
+	      <li><a href="http://www.opera.com/">Opera</a></li>
+	    </ul>
+	</canvas>
+	-->
+
       </div>
     </td>
   </tr>
