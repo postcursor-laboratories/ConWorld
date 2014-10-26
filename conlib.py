@@ -8,7 +8,7 @@ import tag
 xml = tag.maker()
 
 head = xml.head()
-header_tags = (xml.title('ConWorld'),)
+head_tags = (xml.title('ConWorld'),)
 default_tags = (xml.link(rel='stylesheet', type='text/css', href='stylesheet.css'),)
 def with_default_tags(others):
     tags = list(default_tags)
@@ -22,7 +22,7 @@ site_title = xml.h1((shitty_globe, xml.u('Welcome to ConWorld'), shitty_globe))
 # ================================================================ For printing different sections
 def print_section_head(tag_set=default_tags):
     tags = list(tag_set)
-    tags += header_tags
+    tags += head_tags
     head.print_tag(tag_set)
 
 def write_status(code, exitparams=(False, 0)):
@@ -59,7 +59,7 @@ def print_footer():
 
 # ================================================================ Utility functions
 def print_shitty_globe():
-    print('<img src="globe.gif" />')
+    shitty_globe.print_tag()
 
 # end_headers with one extra newline
 end_headers = print
