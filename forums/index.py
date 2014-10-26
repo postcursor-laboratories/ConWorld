@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys, os
 sys.path.insert(1, os.path.join(sys.path[0], '..')) # top-level py
 import tag
