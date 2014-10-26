@@ -9,7 +9,9 @@ class DataMap():
 
     def generate_tile(self, tileX, tileY, heightmap, size=256):
         """This is the main part of a DataMap and will be overwritten by most superclasses.
-        Generating a tile should effect at most the tiles 2 away from it."""
+        Generating a tile should effect at most the tiles 2 away from it.
+        NOTE: This does not make a tile ready for use. Generate tile may modify tiles up to 2 away
+        and before unhiding a tile make sure all tiles 2 away have been propagated."""
         tile = Tile(tileX, tileY, self, size)
         for y in range(size):
             for x in range(size):
