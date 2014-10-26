@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-
-import index
+import conlib
 import tag
 
 xml = tag.maker()
@@ -11,4 +10,4 @@ def print_content():
     maphtml.print_tag()
 
 if __name__ == '__main__':
-    index.main(print_content)
+    conlib.write_page(print_content)

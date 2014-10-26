@@ -4,10 +4,10 @@ import sys
 import png
 import value
 
-def create(octave_weights, seed=None):
+def create(freqs, amps, octs, seed=None):
     if seed == None:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return value.ValueNoise(sum(octave_weights)/len(octave_weights), octaves=len(octave_weights), seed=seed).generate
+    return value.ValueNoise(freqs, amps, octaves=octs, seed=seed).generate
 
 def toPNG(func, xsize, ysize):
     pngdata = []
