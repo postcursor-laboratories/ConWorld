@@ -88,7 +88,7 @@ class TagMaker:
             cache[name] = make
         return cache[name]
     def parse(self, string):
-        soup = bs4.BeautifulSoup(string)
+        soup = bs4.BeautifulSoup(string, 'xml')
         tag = recursiveparse(soup)
         return tag
     def parsefile(self, f):
