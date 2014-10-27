@@ -24,6 +24,7 @@ def rewrite_for_forums(tag):
         tag.attrs['href'] = '../' + tag.attrs['href']
 [rewrite_for_forums(tag) for tag in conlib.default_tags]
 rewrite_for_forums(conlib.shitty_globe)
+[rewrite_for_forums(tag) for tag in conlib.links]
 
 if __name__ == "__main__":
     conlib.write_page(contents.print_tag, conlib.with_default_tags(headertags))
