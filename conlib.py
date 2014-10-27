@@ -21,7 +21,6 @@ site_title = xml.h1((shitty_globe, xml.u('Welcome to ConWorld'), shitty_globe))
 
 links = xml.links([['index.py', 'Home'], ['about.py', 'About'], ['map.py', 'Map'],
                   ['uh.py', 'and'], ['uh.py', 'some'], ['uh.py', 'more'], ['uh.py', 'links!']])
-navbar = xml.h2(links)
 
 # ================================================================ For printing different sections
 def print_section_head(tag_set=default_tags):
@@ -41,7 +40,8 @@ def print_header():
 
     # THE NAVBAR
     br.print_tag()
-    navbar.print_tag()
+    # special link conversion
+    xml.h2(' '.join(str(l) for l in links)).print_tag()
 
 def print_content():
     print('Fool, this ain\'t a page!')
