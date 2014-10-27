@@ -19,6 +19,10 @@ br = xml.br()
 shitty_globe = xml.img(src='globe.gif')
 site_title = xml.h1((shitty_globe, xml.u('Welcome to ConWorld'), shitty_globe))
 
+links = xml.links(['index.py', 'Home'], ['about.py', 'About'], ['map.py', 'Map'],
+                  ['uh.py', 'and'], ['uh.py', 'some'], ['uh.py', 'more'], ['uh.py', 'links!'])
+navbar = xml.h2(links)
+
 # ================================================================ For printing different sections
 def print_section_head(tag_set=default_tags):
     tags = list(tag_set)
@@ -37,15 +41,7 @@ def print_header():
 
     # THE NAVBAR
     br.print_tag()
-    print('<h2>')
-    print('<a href="index.py">Home</a>')
-    print('<a href="about.py">About</a>')
-    print('<a href="map.py">Map</a>')
-    print('<a href="uh.py">and</a>')
-    print('<a href="uh.py">some</a>')
-    print('<a href="uh.py">more</a>')
-    print('<a href="uh.py">links!</a>')
-    print('</h2>')
+    navbar.print_tag()
 
 def print_content():
     print('Fool, this ain\'t a page!')
