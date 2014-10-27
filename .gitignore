@@ -3,3 +3,5 @@
 __pycache__/
 webhooks/
 
+/map/data/*
+/.idea/*

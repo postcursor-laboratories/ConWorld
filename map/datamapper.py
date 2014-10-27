@@ -43,21 +43,24 @@ class DataMap():
 
 class Tile():
     """Stores a 2d array of... anything, I guess. Also holds it's x, y, and status of generation."""
-    def __init__(self, x, y, parent, size = 256):
-        self._x = x
-        self._y = y
-        self.size = size
-        self.map = []
-        for i in range(size):
-            self.map += [[]]
-            for j in range(size):
-                self.map[i] += [0]
-        self.parent = parent
-        
-        self._state = 0 #0: completely ungenerated.
-                        #1: has some generation but has not generated itself yet. eg rivers flow in, but no springs
-                        #2: has generated itself but some tiles may still modify it.
-                        #3: completely defined, all tiles around it cannot modify it anymore.
+    def __init__(self, x, y, parent, overwrite = False, size = 256):
+        if not parent.tile_exists(x,y) or overwrite: # If tile has never been created or we want force overwrite
+            self._x = x
+            self._y = y
+            self.size = size
+            self.map = []
+            for i in range(size):
+                self.map += [[]]
+                for j in range(size):
+                    self.map[i] += [0]
+            self.parent = parent
+
+            self._state = 0 #0: completely ungenerated.
+                            #1: has some generation but has not generated itself yet. eg rivers flow in, but no springs
+                            #2: has generated itself but some tiles may still modify it.
+                            #3: completely defined, all tiles around it cannot modify it anymore.
+        else:
+            self = parent.load_tile(x,y) # Tile already exists and we don't want to overwrite
 
     def save(self):
         """Saves this tile as a pickled data file"""
@@ -67,16 +70,3 @@ class Tile():
         f = open(os.path.join(os.path.dirname(__file__), "data", self.parent.name, (str(self._x) + "-" + str(self._y)))+".data", 'wb')
         pickle.dump(self.map, f, 2)
         f.close()
-
-    
-    
-
-##DEBUG
-tile = []
-for i in range(255**2):
-    tile += [i]
-
-d = DataMap("test")
-d.generate_tile(0,0,0,256)
-print(d.tile_exists(0,0))
-print(d.load_tile(0,0)[50][50])
