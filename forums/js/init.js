@@ -2,12 +2,16 @@ requirejs.config({
     // "enforceDefine": true,
     "paths": {
         "jquery": ["//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min"],
-        "jqui": ["//code.jquery.com/ui/1.11.0/jquery-ui.min"]
+        "jqui": ["//code.jquery.com/ui/1.11.0/jquery-ui.min"],
+        "firebase": ["https://cdn.firebase.com/js/client/1.1.2/firebase.js"]
     },
     shim: {
         "jqui": {
-            export:"$" ,
+            export: "$",
             deps: ['jquery']
+        },
+        "firebase": {
+            export: "Firebase",
         }
     }
 });
