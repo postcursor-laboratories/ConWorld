@@ -7,11 +7,11 @@ requirejs.config({
     },
     shim: {
         "jqui": {
-            export: "$",
+            exports: "$",
             deps: ['jquery']
         },
         "firebase": {
-            export: "Firebase",
+            exports: "Firebase",
         }
     }
 });
