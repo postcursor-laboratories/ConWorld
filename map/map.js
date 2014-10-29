@@ -34,8 +34,8 @@ function mouse_move(event){
 	};
     }
 
-    _mouse_move_x = pos.x;
-    _mouse_move_y = pos.y;
+    _mouse_move_x = pos.x - $("#mapFrame").offset().left;
+    _mouse_move_y = pos.y - $("#mapFrame").offset().top;
 
     return false;
 }
@@ -170,13 +170,15 @@ function heartbeat(){
     }
 
     // Update the metadata bar
-    /*
+    
     if (_mouse_state == _MOUSE_UP)
 	metabar_update(_map_x+_mouse_move_x, _map_y+_mouse_move_y);
     else
 	metabar_update(_map_x, _map_y);
-    */
-    metabar_update(_map_x, _map_y);
+    
+
+    console.log(_map_x, _map_y, _mouse_move_x, _mouse_move_y);
+    //metabar_update(_map_x + _mouse_move_x, _map_y + _mouse_move_y);
 
     _mouse_move_lastX = _mouse_move_x;
     _mouse_move_lastY = _mouse_move_y;
