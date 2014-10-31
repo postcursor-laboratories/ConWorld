@@ -17,8 +17,10 @@ _map_x = 0;
 _map_y = 0;
 _mouse_move_x = 0;
 _mouse_move_y = 0;
-_mouse_move_lastX = 0;
+_mouse_move_lastX = 0;		// lastX|Y are used for calculating mouse deltas
 _mouse_move_lastY = 0;
+_mouse_move_meta_lastX = 0;	// meta_lastX|Y are used for updating metabar data during scrolling
+_mouse_move_meta_lastY = 0;
 _tile_deletionQueue = [];	// a list of tiles to remove
 
 // -------------------------------------------------------------------------------- mouse handlers
@@ -42,6 +44,8 @@ function mouse_move(event){
 
 function mouse_dn(event){
     _mouse_state = _MOUSE_DN;
+    _mouse_move_meta_lastX = _mouse_move_x;
+    _mouse_move_meta_lastY = _mouse_move_y;
 
     return false;
 }
@@ -170,12 +174,13 @@ function heartbeat(){
     }
 
     // Update the metadata bar
-    
+    /*
     if (_mouse_state == _MOUSE_UP)
 	metabar_update(_map_x+_mouse_move_x, _map_y+_mouse_move_y);
     else
-	metabar_update(_map_x, _map_y);
-    
+	metabar_update(_map_x+_mouse_move_meta_lastX, _map_y+_mouse_move_meta_lastY);
+    */
+    metabar_update(_map_x, _map_y);
 
     console.log(_map_x, _map_y, _mouse_move_x, _mouse_move_y);
     //metabar_update(_map_x + _mouse_move_x, _map_y + _mouse_move_y);
