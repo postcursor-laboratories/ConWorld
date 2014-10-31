@@ -19,7 +19,7 @@ br = xml.br()
 shitty_globe = xml.img(src='globe.gif')
 site_title = xml.h1((shitty_globe, xml.u('Welcome to ConWorld'), shitty_globe))
 
-links = xml.links([['index.py', 'Home'], ['about.py', 'About'], ['map.py', 'Map'],
+links = xml.links([['index.py', 'Home'], ['about.py', 'About'], ['map.py', 'Map'], ['forums/forum.py', 'Forums'],
                   ['uh.py', 'and'], ['uh.py', 'some'], ['uh.py', 'more'], ['uh.py', 'links!']])
 
 # ================================================================ For printing different sections
