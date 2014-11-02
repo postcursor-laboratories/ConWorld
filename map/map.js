@@ -73,6 +73,7 @@ function slider_update(event){
     document.getElementById("zoomLabel").innerHTML = "Zoom: "+_zoom_level+"x";
 
     // update map
+    /*
     _RAPHAEL.forEach(function(el){
 	var type = el.node.tagName;
 	if (type !== "image")
@@ -80,11 +81,18 @@ function slider_update(event){
 
 	tile_update(el);
     });
+    */
+
+    var x = 0;//_MAPFRAME.style.width;
+    var y = 0;//_MAPFRAME.style.height;
+    var w = unzoomcalc(parseInt(_MAPFRAME.style.width));
+    var h = unzoomcalc(parseInt(_MAPFRAME.style.height));
+    _RAPHAEL.setViewBox(x,y,w,h,false);
 }
 
 window.onload = function(){
     _MAPFRAME = document.getElementById('mapFrame');
-    _RAPHAEL = Raphael(mapFrame, mapFrame.style.width, mapFrame.style.height, null);
+    _RAPHAEL = Raphael(_MAPFRAME, parseInt(_MAPFRAME.style.width), parseInt(_MAPFRAME.style.height), null);
 
     _MAPFRAME.onmousemove = mouse_move;
     _MAPFRAME.onmouseup   = mouse_up;
