@@ -73,15 +73,14 @@ function tile_name(x, y){
     if(x < 0 || x >= 2048) return 'invalid';
     if(y < 0 || y >= 2048) return 'invalid';
 
-    console.log(x);
-    console.log(y);
+    console.log('pre coords: ' + x + ',' + y);
     x = Math.floor(x);
     y = Math.floor(y);
-    console.log(x);
-    console.log(y);
+    console.log('after coords: ' + x + ',' + y);
 
     var xval = ('0000'+x).slice(-4);
     var yval = ('0000'+y).slice(-4);
+    console.log('req: ' + xval + ',' + yval);
     return "tile-"+xval+"-"+yval;
 }
 
@@ -131,6 +130,7 @@ function map_move(x,y){
 
     var midTileX = Math.floor(-x/256 + parseInt(mapFrame.style.width)/2/256);
     var midTileY = Math.floor(-y/256 + parseInt(mapFrame.style.height)/2/256);
+    console.log('mix x ' + midTileX);
 
     if (midTileX !== map_move_lastMidTileX || midTileY !== map_move_lastMidTileY){
 	for(var i=-radius_unload; i<radius_unload; i++)
