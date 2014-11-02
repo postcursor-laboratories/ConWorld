@@ -90,16 +90,7 @@ window.onload = function(){
     _MAPFRAME.onmouseup   = mouse_up;
     _MAPFRAME.onmousedown = mouse_dn;
 
-    setInterval(heartbeat, 100);
-    
-    /*
-    setInterval(function(){
-	console.time('heartbeat');
-	heartbeat();
-	console.timeEnd('heartbeat');
-    }, 100);
-    */
-
+    requestAnimationFrame(heartbeat);
     map_draw();
 
     $("#zoomSlider").on("input change", function(){  slider_update();  });
@@ -222,6 +213,7 @@ function heartbeat(){
 
     _mouse_move_lastX = _mouse_move_x;
     _mouse_move_lastY = _mouse_move_y;
+    requestAnimationFrame(heartbeat);
 }
 
 function metabar_update(xval, yval){
