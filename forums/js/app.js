@@ -4,12 +4,12 @@ define(["jqui", "firebase"], function ($undef, Firebase) {
     var hooks = {};
     app.hooks = hooks;
     function generate_forum_topic(forum) {
-        return '<div id="' + forum + '" class="forum-topic"></div>';
+        return '<div id="' + forum.name() + '" class="forum-topic">' + forum.val() + '</div>';
     }
     hooks.add_forum = function (forum, lastForumName) {
         var name = forum.name();
         var fcontainer = $('#forums');
-        var topic = generate_forum_topic(name);
+        var topic = generate_forum_topic(forum);
         if (!lastForumName) {
             // just dump it at the top
             fcontainer.prepend(topic);
