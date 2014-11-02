@@ -30,10 +30,10 @@ if __name__ == '__main__':
     
     #weights = [.1, .1, .2, .3, .5, 1]
     #weights = [0, 0, 0, 0, 1]
-    octaves = int(sys.argv[2]) if len(sys.argv) > 2 else None
+    octaves = int(sys.argv[2]) if len(sys.argv) > 2 else 1
     seed    = int(sys.argv[3]) if len(sys.argv) > 3 else None
     octonly = int(sys.argv[4]) if len(sys.argv) > 4 else None
-    octnum  = float(sys.argv[5]) if len(sys.argv) > 5 else None
+    octnum  = float(sys.argv[5]) if len(sys.argv) > 5 else 1
 
     weights = [(1/2)**(i+1) for i in range(octaves)]
     weights = weights[:octaves+1]
