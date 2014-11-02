@@ -88,7 +88,7 @@ function change_tile_loadedness(x,y,load){
     if (!elem)
 	console.log("Couldn't get elem "+name+":", elem);
 
-    var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
+    var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'tiles/unloaded.png') + '" />';
     var currLoaded = elem.attributes.currentlyLoaded.value === 'Y';
 
     if (currLoaded != load){
