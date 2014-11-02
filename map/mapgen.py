@@ -81,7 +81,7 @@ def generate_tile(tilex, tiley):
     
     mp = transform_addAltitude(hm)
 
-    createPNG(mp, "tile-%04d-%04d.png" % (tilex, tiley), 256)
+    createPNG(mp, "tile-%04d-%04d.png" % (tilex, tiley))
     
 
 def createPNG(pixelfunc, filename, size):
