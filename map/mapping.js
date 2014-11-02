@@ -9,13 +9,13 @@ function drag_getTarget(e){
     var targ = document.getElementById("mapTableHolder");
     return targ;
 }
-
+var clickInitialX, clickInitialY, coordX, coordY, drag_isDragging;
 function drag_init(e) {
     //console.log("drag_init("+e+")");
     
     // determine event object
     if (!e)
-	var e = window.event;
+	    e = window.event;
 
     var targ = drag_getTarget(e);
     if (targ.className != 'draggable'){
@@ -27,8 +27,8 @@ function drag_init(e) {
     clickInitialY = e.clientY;
 
     // assign default values for top and left properties
-    if(!targ.style.left) { targ.style.left = '0px'};
-    if(!targ.style.top)  { targ.style.top  = '0px'};
+    if(!targ.style.left) { targ.style.left = '0px'; }
+    if(!targ.style.top)  { targ.style.top  = '0px'; }
 
     // calculate integer values for top and left properties
     coordX = parseInt(targ.style.left);
@@ -44,7 +44,7 @@ function drag_drag(e) {
     //console.log("drag_drag("+e+")");
 
     if (!drag_isDragging)   return;
-    if (!e)	var e=window.event;
+    if (!e)	e = window.event;
 
     // get new position
     var x = coordX+e.clientX-clickInitialX;
@@ -64,7 +64,7 @@ function drag_stop() {
 window.onload = function() {
     document.onmousedown = drag_init;
     document.onmouseup   = drag_stop;
-}
+};
 
 // ====================================================================== end dragging code
 
@@ -73,11 +73,14 @@ function tile_name(x, y){
     if(x < 0 || x >= 2048) return 'invalid';
     if(y < 0 || y >= 2048) return 'invalid';
 
-    x = Math.floor(x)
-    y = Math.floor(y)
+    console.log('pre coords: ' + x + ',' + y);
+    x = Math.floor(x);
+    y = Math.floor(y);
+    console.log('after coords: ' + x + ',' + y);
 
     var xval = ('0000'+x).slice(-4);
     var yval = ('0000'+y).slice(-4);
+    console.log('req: ' + xval + ',' + yval);
     return "tile-"+xval+"-"+yval;
 }
 
@@ -88,15 +91,16 @@ function change_tile_loadedness(x,y,load){
     if (!elem)
 	console.log("Couldn't get elem "+name+":", elem);
 
-    var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'unloaded.png') + '" />';
-    var currLoaded = elem.attributes['currentlyLoaded'].value === 'Y';
+    var text = '<img src="map/' + (load ? 'get_tile.py?n='+name : 'tiles/unloaded.png') + '" />';
+    var currLoaded = elem.attributes.currentlyLoaded.value === 'Y';
 
     if (currLoaded != load){
 	elem.innerHTML = text;
-	elem.attributes['currentlyLoaded'].value = load?'Y':'N';
+	elem.attributes.currentlyLoaded.value = load?'Y':'N';
     }
 }
 
+var map_move_lastMidTileX, map_move_lastMidTileY, mapSize;
 function map_move(x,y){
     // for boundary calculations.
     var mapFrame = document.getElementById("mapFrame");
@@ -126,6 +130,7 @@ function map_move(x,y){
 
     var midTileX = Math.floor(-x/256 + parseInt(mapFrame.style.width)/2/256);
     var midTileY = Math.floor(-y/256 + parseInt(mapFrame.style.height)/2/256);
+    console.log('mix x ' + midTileX);
 
     if (midTileX !== map_move_lastMidTileX || midTileY !== map_move_lastMidTileY){
 	for(var i=-radius_unload; i<radius_unload; i++)

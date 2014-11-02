@@ -3,15 +3,11 @@ from collections import Sequence
 import random
 import math
 
-def c_mul(a, b):
-    return eval(hex((int(a) * b) & 0xFFFFFFFF)[:-1])
 def hashtuplesafe(tup):
     value = 0x345678
     for item in tup:
-        value = c_mul(1000003, value) ^ hash(item)
+        value = (1000003 * value) ^ item
     value = value ^ len(tup)
-    if value == -1:
-        value = -2
     return value
 def replwfunc(o):
     if isinstance(o, Number):
@@ -40,8 +36,7 @@ class ValueNoise:
         key = (x, y, self.seed)
         noise = self.noisemap
         if key not in noise:
-            random.seed(hashtuplesafe((hashtuplesafe(key), hashtuplesafe(key))))
-            random.seed(random.randint(0, 0xFFFFFFFF))
+            random.seed(hashtuplesafe(key))
             noise[key] = random.randint(0, 1000) / 1000
         return noise[key]
     def smooth_noise(self, x, y):
