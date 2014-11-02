@@ -7,6 +7,7 @@ _MOUSE_UP = 0;
 _MOUSE_DN = 1;
 _TILESIZE = 256;
 _METERS_PER_PIXEL = 20;
+_RAPHAEL_IMAGE_CUSTOM_DATA_KEY = "ThisIsAUniqueStringThatNoOneElseWillUse";
 
 // Well, except these ones. They're set properly in window.onload below. But begone, sneak!
 _RAPHAEL  = "This hasn't been defined yet! Wait for the page to load!";
@@ -22,7 +23,7 @@ _mouse_move_lastY = 0;
 _mouse_move_meta_lastX = 0;	// meta_lastX|Y are used for updating metabar data during scrolling
 _mouse_move_meta_lastY = 0;
 _tile_deletionQueue = [];	// a list of tiles to remove
-_zoom_level = 1.5;
+_zoom_level = 1;
 
 // -------------------------------------------------------------------------------- event handlers
 
@@ -77,9 +78,7 @@ function slider_update(event){
 	if (type !== "image")
 	    return;
 
-	el.transform("s"+_zoom_level);
-
-	// TODO adjust distances between tiles, not just the image sizes
+	tile_update(el);
     });
 }
 
@@ -135,13 +134,23 @@ function tile_isVisible(x,y){
 }
 
 function tile_new(x,y){
-    _RAPHAEL.image("map/get_tile.py?n="+tile_name(x,y), zoomcalc(x), zoomcalc(y), zoomcalc(_TILESIZE), zoomcalc(_TILESIZE));
+    var tile = _RAPHAEL.image("map/get_tile.py?n="+tile_name(x,y),
+			      zoomcalc(x), zoomcalc(y), zoomcalc(_TILESIZE), zoomcalc(_TILESIZE));
+    tile.data(_RAPHAEL_IMAGE_CUSTOM_DATA_KEY, { tilex: x, tiley: y });
 }
 
 function zoomcalc(x){      return _zoom_level*x;	}
 function unzoomcalc(x){    return x/_zoom_level;	}
 
 // -------------------------------------------------------------------------------- drawing and meta
+
+function tile_update(el){
+    var dat = el.data(_RAPHAEL_IMAGE_CUSTOM_DATA_KEY);
+    var tx  = zoomcalc(_TILESIZE*dat.x + _map_x);
+    var ty  = zoomcalc(_TILESIZE*dat.y + _map_y);
+    var transform = "s"+_zoom_level+"t"+tx+","+ty;
+    el.transform(transform);
+}
 
 // heartbeat() is a function that is called periodically (via setInterval()) to perform updates
 function heartbeat(){
@@ -255,7 +264,4 @@ function map_draw(){
 	    tile_new(x,y);
 	}
     }    
-
-    var circle = _RAPHAEL.circle(_map_x, _map_y, 20, 20);
-    circle.attr("fill", "#f00");
 }
