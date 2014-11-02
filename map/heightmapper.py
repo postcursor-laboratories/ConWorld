@@ -43,5 +43,5 @@ if __name__ == '__main__':
         else:
             weights = [octnum if i+1 == octonly else 0 for i in range(octonly)]
     print(weights)
-    func = create(weights, seed)
+    func = create(weights, weights, len(weights), seed)
     toPNG(func, 1024, 1024).save(sys.argv[1])
