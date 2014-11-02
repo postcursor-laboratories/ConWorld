@@ -20,7 +20,7 @@ define(["jqui", "firebase"], function ($undef, Firebase) {
     };
 
     function setup_firehooks(fb) {
-        fb.on('child_added', add_forum);
+        fb.on('child_added', hooks.add_forum);
     }
 
     app.init = function init() {
