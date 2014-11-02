@@ -73,8 +73,12 @@ function tile_name(x, y){
     if(x < 0 || x >= 2048) return 'invalid';
     if(y < 0 || y >= 2048) return 'invalid';
 
+    console.log(x);
+    console.log(y);
     x = Math.floor(x);
     y = Math.floor(y);
+    console.log(x);
+    console.log(y);
 
     var xval = ('0000'+x).slice(-4);
     var yval = ('0000'+y).slice(-4);
