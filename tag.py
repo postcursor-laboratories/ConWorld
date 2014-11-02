@@ -28,6 +28,8 @@ class Tag:
             kwargs['class'] = kwargs['class_']
             del kwargs['class_']
         self.attrs = kwargs
+    def __getattr__(self, name):
+        return self.attrs.get(name)
     def __repr__(self):
         return self.get_tag()
     def wrapin(self, tag):
@@ -79,7 +81,8 @@ def recursiveparse(node):
 
 class TagMaker:
     def __init__(self):
-        self.cache = {}
+        brinst = maketag('br')
+        self.cache = {'br': lambda c='', **kwargs: brinst}
     def __getattr__(self, name):
         cache = self.cache
         if not name in cache:
@@ -87,8 +90,19 @@ class TagMaker:
                 return maketag(name, content, **kwargs)
             cache[name] = make
         return cache[name]
+    def links(self, linklist):
+        """
+        Generates a list of <a>'s based of the data provided.
+        linklist - a list of pairs where [0] is the url and [1] is the text.
+        You may provide just the url, it will be used as the text
+        """
+        def morph(obj):
+            if hasattr(obj, '__len__'):
+                return obj if len(obj) > 1 else (obj[0], obj[0])
+            return (obj, obj)
+        return [self.a(href=urltext[0], content=urltext[1]) for urltext in (morph(obj) for obj in linklist)]
     def parse(self, string):
-        soup = bs4.BeautifulSoup(string)
+        soup = bs4.BeautifulSoup(string, 'xml')
         tag = recursiveparse(soup)
         return tag
     def parsefile(self, f):
