@@ -16,6 +16,7 @@ define(["jqui", "firebase"], function ($undef, Firebase) {
         } else {
             $(topic).insertAfter('#' + name);
         }
+        console.log('added ' + name + ' as ' + topic);
     };
 
     function setup_firehooks(fb) {
