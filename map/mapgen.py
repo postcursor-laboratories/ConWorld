@@ -25,7 +25,6 @@ _seed = 0xCAFEBABEDEADBEEF
 _tilesize = 256
 _heightmapper = heightmapper.create(freqs, amps, count, _seed)
 
-
 _alt_sea   = 128
 _alt_beach = _alt_sea+20
 _alt_snow  = 200
@@ -78,10 +77,9 @@ def get_heightmap(tilex, tiley):
 def generate_tile(tilex, tiley):
     """Generates the tile at position (TILEX, TILEY) and saves it as a .PNG file."""
     hm = get_heightmap(tilex, tiley)
-    
     mp = transform_addAltitude(hm)
 
-    createPNG(mp, "tile-%04d-%04d.png" % (tilex, tiley))
+    createPNG(mp, "tile-%04d-%04d.png" % (tilex, tiley), 256)
     
 
 def createPNG(pixelfunc, filename, size):
