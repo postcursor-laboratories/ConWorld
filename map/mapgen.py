@@ -9,7 +9,7 @@ import sys
 
 # note that the size of each pixel is 20 meters
 base = .4
-count = 15
+count = 6
 freqs = []
 amps = []
 copy = count
