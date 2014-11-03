@@ -4,4 +4,4 @@ __pycache__/
 webhooks/
 /map/data/*
 /.idea/*
-map/tiles/tile*
+#map/tiles/tile*
