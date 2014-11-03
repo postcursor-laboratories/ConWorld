@@ -194,6 +194,7 @@ $(function(){
 
     // heartbeat() is a function that is called periodically (via setInterval()) to perform updates
     function heartbeat(){
+	//var start = performance.now();
 	var deltax = _mouse_move_x-_mouse_move_lastX;
 	var deltay = _mouse_move_y-_mouse_move_lastY;
 
@@ -201,8 +202,8 @@ $(function(){
 	    _viewBox.x -= unzoomcalc(deltax);
 	    _viewBox.y -= unzoomcalc(deltay);
 
-	    // move the map
 	    /*
+	    // remove invisible tiles
 	    _RAPHAEL.forEach(function(el){
 		var type = el.node.tagName;
 		if (type !== "image"){
@@ -215,29 +216,26 @@ $(function(){
 			_tile_deletionQueue.push(el); // appends to list
 			//console.log("queue edit: ", _tile_deletionQueue);
 		    }
-		    return;
 		}
 	    });
-	    */
 
-	    // add the tiles that aren't currently visible
-	    /*
-	      for (var x = 0; x < parseInt(_RAPHAEL.width); x += _TILESIZE) {
-	      for (var y = 0; y < parseInt(_RAPHAEL.height); y += _TILESIZE) {
-	      var els = _RAPHAEL.getElementsByPoint(x,y);
-	      //if (els.length != 0) // continue if there's at least one element
-	      //continue;
-
-	      if (els.length == 0){
-	      // add tile to the map coordinate equivalent of Raphael's screen coords x,y
-	      var mapX = _viewBox.x + x;
-	      var mapY = _viewBox.y + y;
-	      console.log("Adding new tile at ("+mapX+","+mapY+")");
-	      tile_new(mapX, mapY);
-	      }else
-	      console.log(0);
-	      }
-	      }
+	    // add tiles that should be visible but aren't
+	    for (var x = 0; x < _RAPHAEL.width; x += _TILESIZE) {
+		for (var y = 0; y < _RAPHAEL.height; y += _TILESIZE) {
+		    var els = _RAPHAEL.getElementsByPoint(x,y);
+		    if (els.length != 0) // continue if there's at least one element
+			continue;
+		    
+		    if (els.length == 0){
+			// add tile to the map coordinate equivalent of Raphael's screen coords x,y
+			var mapX = _viewBox.x + x;
+			var mapY = _viewBox.y + y;
+			console.log("Adding new tile at ("+mapX+","+mapY+")");
+			tile_new(mapX, mapY);
+		    }else
+			console.log(0);
+		}
+	    }
 	    */
 	}
 
@@ -256,6 +254,9 @@ $(function(){
 	_mouse_move_lastX = _mouse_move_x;
 	_mouse_move_lastY = _mouse_move_y;
 	requestAnimationFrame(heartbeat);
+
+	//var deltaT = performance.now() - start;
+	//console.log("heartbeat: ", Math.floor(deltaT)+"ms");
     }
 
     function metabar_update(xval, yval){
@@ -273,8 +274,8 @@ $(function(){
 	    }
 	};
 
-	var x = fancyCoordsify(xval, { pos: "West",  neg: "East"  });
-	var y = fancyCoordsify(yval, { pos: "North", neg: "South" });
+	var x = fancyCoordsify(-xval, { pos: "West",  neg: "East"  });
+	var y = fancyCoordsify(-yval, { pos: "North", neg: "South" });
 	
 	var inner = y+", "+x;
 
@@ -287,9 +288,9 @@ $(function(){
     // -------------------------------------------------------------------------------- main
 
     // draw the initial map stuff (with Raphael!)
-    for (var x = _viewBox.x - _TILESIZE; x < _viewBox.x + parseInt(_RAPHAEL.width) + _TILESIZE; x += _TILESIZE) {
-	for (var y = _viewBox.y - _TILESIZE; y < _viewBox.y + parseInt(_RAPHAEL.height) + _TILESIZE; y += _TILESIZE) {
-	    tile_new(x,y);
+    for (var tilex = -10; tilex < 10; tilex++){
+	for (var tiley = -10; tiley < 10; tiley++){
+	    tile_new(tilex*_TILESIZE, tiley*_TILESIZE);
 	}
     }
 
