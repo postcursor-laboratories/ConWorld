@@ -79,7 +79,7 @@ $(function(){
 	    zoom = maxZoom;
 	_zoom_level = zoom;
 
-	// update metadata header
+	// update metabar
 	var places = 2;
 	var zoomish = Math.floor(Math.pow(10,places)*_zoom_level)/Math.pow(10,places);
 	document.getElementById("zoomLabel").innerHTML = "Zoom: "+zoomish+"x";
@@ -192,16 +192,6 @@ $(function(){
 
     // -------------------------------------------------------------------------------- drawing and meta
 
-    /*
-    function tile_update(el){
-	var dat = el.data(_RAPHAEL_IMAGE_CUSTOM_DATA_KEY);
-	var tx  = zoomcalc(_TILESIZE*dat.x + _viewBox.x);
-	var ty  = zoomcalc(_TILESIZE*dat.y + _viewBox.y);
-	var transform = "s"+_zoom_level+"t"+tx+","+ty;
-	el.transform(transform);
-    }
-    */
-
     // heartbeat() is a function that is called periodically (via setInterval()) to perform updates
     function heartbeat(){
 	var deltax = _mouse_move_x-_mouse_move_lastX;
@@ -261,7 +251,7 @@ $(function(){
 	  else
 	  metabar_update(_viewBox.x+_mouse_move_meta_lastX, _viewBox.y+_mouse_move_meta_lastY);
 	*/
-	metabar_update(_viewBox.x, _viewBox.y);
+	metabar_update(_viewBox.x+_viewBox.w/2, _viewBox.y+_viewBox.h/2);
 
 	_mouse_move_lastX = _mouse_move_x;
 	_mouse_move_lastY = _mouse_move_y;
