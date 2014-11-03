@@ -69,8 +69,14 @@ class ValueNoise:
 
         result = self.resultmap
         if key not in result:
-            result[key] = 128 * sum(self.smooth_noise(x*self.frequency(n), y*self.frequency(n))*self.amplitude(n) for n in range(self.octaves)) / self.octaves
-
+            tmp = 0
+            for n in range(self.octaves):
+                f = self.frequency(n)
+                a = self.amplitude(n)
+                tmp += self.smooth_noise(x*f, y*f)*a
+            tmp /= self.octaves
+            tmp *= 128
+            result[key] = tmp
         return (result[key],)
 
 __all__ = ["ValueNoise"]
