@@ -14,9 +14,9 @@ $(function(){
     var _MAPFRAME_H = parseInt(_MAPFRAME[0].style.height);
     var _RAPHAEL = Raphael(_MAPFRAME[0], _MAPFRAME_W, _MAPFRAME_H, null);
 
+    var _viewBox = { x: 0, y: 0, w: _MAPFRAME_W, h: _MAPFRAME_H };
+
     var _mouse_isDown = false;
-    var _map_x = 0;		// in pixel units
-    var _map_y = 0;
     var _mouse_move_x = 0;
     var _mouse_move_y = 0;
     var _mouse_move_lastX = 0;		// lastX|Y are used for calculating mouse deltas
@@ -25,6 +25,11 @@ $(function(){
     //var _mouse_move_meta_lastY = 0;
     var _tile_deletionQueue = [];	// a list of tiles to remove
     var _zoom_level = 1;
+
+    // TODO REMOVE THIS. It's only here for debugging.
+    _handle = function(exp){
+	return eval(exp);
+    }
 
     // -------------------------------------------------------------------------------- event handlers
 
@@ -66,10 +71,18 @@ $(function(){
     });
 
     function zoom_update(zoom){
+	var minZoom = .0625;
+	var maxZoom = 8;
+	if (zoom < minZoom)
+	    zoom = minZoom;
+	if (zoom > maxZoom)
+	    zoom = maxZoom;
 	_zoom_level = zoom;
 
 	// update metadata header
-	document.getElementById("zoomLabel").innerHTML = "Zoom: "+_zoom_level+"x";
+	var places = 2;
+	var zoomish = Math.floor(Math.pow(10,places)*_zoom_level)/Math.pow(10,places);
+	document.getElementById("zoomLabel").innerHTML = "Zoom: "+zoomish+"x";
 
 	// update map
 	/*
@@ -82,11 +95,12 @@ $(function(){
 	  });
 	*/
 
-	var x = 0;//_MAPFRAME.style.width;
-	var y = 0;//_MAPFRAME.style.height;
-	var w = unzoomcalc(_MAPFRAME_W);
-	var h = unzoomcalc(_MAPFRAME_H);
-	_RAPHAEL.setViewBox(x,y,w,h,false);
+	var vb_w = _viewBox.w;
+	var vb_h = _viewBox.h;
+	_viewBox.w = unzoomcalc(_MAPFRAME_W);
+	_viewBox.h = unzoomcalc(_MAPFRAME_H);
+	_viewBox.x -= (_viewBox.w-vb_w)/2;
+	_viewBox.y -= (_viewBox.h-vb_h)/2;
 
 	return false;
     }
@@ -113,8 +127,12 @@ $(function(){
 
 	// delta is positive if scrolled up, negative if scrolled down
 	if(delta){
-	    var zoom = _zoom_level*(delta>0 ? 1.05 : .95);
-	    zoom_update(zoom);
+	    var absDelta = (delta>0 ? delta : -delta);
+	    if (absDelta > 5)
+		absDelta = 5;
+
+	    var zoomFactor = 1 + (delta>0 ? 1 : -1)*absDelta/25;
+	    zoom_update(_zoom_level*zoomFactor);
 	}
 
 	// prevents default mouse wheel action
@@ -136,6 +154,8 @@ $(function(){
 	    return n>1 ? 1 : -1;
 	}
 
+	x = unzoomcalc(x);
+	y = unzoomcalc(y);
 	x /= _TILESIZE;
 	y /= _TILESIZE;
 	x = sign(x)*Math.floor(Math.abs(x))
@@ -150,9 +170,11 @@ $(function(){
     }
 
     function tile_isVisible(x,y){
+	x = zoomcalc(x);
+	y = zoomcalc(y);
 	if (x < -_TILESIZE || y < -_TILESIZE)
 	    return false;
-	if (x > parseInt(_RAPHAEL.width) || y > parseInt(_RAPHAEL.height))
+	if (x > _MAPFRAME_W || y > _MAPFRAME_H)
 	    return false;
 	return true;
     }
@@ -163,18 +185,22 @@ $(function(){
 	tile.data(_RAPHAEL_IMAGE_CUSTOM_DATA_KEY, { tilex: x, tiley: y });
     }
 
-    function zoomcalc(x){      return _zoom_level*x;	}
+    function zoomcalc(x){      return x*_zoom_level;	}
     function unzoomcalc(x){    return x/_zoom_level;	}
+
+    function updateViewBox(){  _RAPHAEL.setViewBox(_viewBox.x, _viewBox.y, _viewBox.w, _viewBox.h);  }
 
     // -------------------------------------------------------------------------------- drawing and meta
 
+    /*
     function tile_update(el){
 	var dat = el.data(_RAPHAEL_IMAGE_CUSTOM_DATA_KEY);
-	var tx  = zoomcalc(_TILESIZE*dat.x + _map_x);
-	var ty  = zoomcalc(_TILESIZE*dat.y + _map_y);
+	var tx  = zoomcalc(_TILESIZE*dat.x + _viewBox.x);
+	var ty  = zoomcalc(_TILESIZE*dat.y + _viewBox.y);
 	var transform = "s"+_zoom_level+"t"+tx+","+ty;
 	el.transform(transform);
     }
+    */
 
     // heartbeat() is a function that is called periodically (via setInterval()) to perform updates
     function heartbeat(){
@@ -182,36 +208,27 @@ $(function(){
 	var deltay = _mouse_move_y-_mouse_move_lastY;
 
 	if (_mouse_isDown){
-	    _map_x += unzoomcalc(deltax);
-	    _map_y += unzoomcalc(deltay);
+	    _viewBox.x -= unzoomcalc(deltax);
+	    _viewBox.y -= unzoomcalc(deltay);
 
 	    // move the map
+	    /*
 	    _RAPHAEL.forEach(function(el){
 		var type = el.node.tagName;
 		if (type !== "image"){
 		    return;
 		}
 
-		// el.translate() is deprecated and hella slow anyway
-		//el.translate(deltax, deltay);
-
-		// el.transform() is fast, avoids the image lag problem, and
-		// just.. generally doesn't suck
-		var x = el.matrix.x(0,0) + deltax;
-		var y = el.matrix.y(0,0) + deltay;
-		el.transform("t"+x+","+y);
-
 		// if tile is no longer visible, remove it
-		/*
-		  if (!tile_isVisibleEl(el)){
-		  if (_tile_deletionQueue.indexOf(el) == -1){
-		  _tile_deletionQueue.push(el); // appends to list
-		  //console.log("queue edit: ", _tile_deletionQueue);
-		  }
-		  return;
-		  }
-		*/
+		if (!tile_isVisibleEl(el)){
+		    if (_tile_deletionQueue.indexOf(el) == -1){
+			_tile_deletionQueue.push(el); // appends to list
+			//console.log("queue edit: ", _tile_deletionQueue);
+		    }
+		    return;
+		}
 	    });
+	    */
 
 	    // add the tiles that aren't currently visible
 	    /*
@@ -223,8 +240,8 @@ $(function(){
 
 	      if (els.length == 0){
 	      // add tile to the map coordinate equivalent of Raphael's screen coords x,y
-	      var mapX = _map_x + x;
-	      var mapY = _map_y + y;
+	      var mapX = _viewBox.x + x;
+	      var mapY = _viewBox.y + y;
 	      console.log("Adding new tile at ("+mapX+","+mapY+")");
 	      tile_new(mapX, mapY);
 	      }else
@@ -234,17 +251,17 @@ $(function(){
 	    */
 	}
 
+	// perform zooming and panning
+	updateViewBox();
+
 	// Update the metadata bar
 	/*
 	  if (!_mouse_isDown)
-	  metabar_update(_map_x+_mouse_move_x, _map_y+_mouse_move_y);
+	  metabar_update(_viewBox.x+_mouse_move_x, _viewBox.y+_mouse_move_y);
 	  else
-	  metabar_update(_map_x+_mouse_move_meta_lastX, _map_y+_mouse_move_meta_lastY);
+	  metabar_update(_viewBox.x+_mouse_move_meta_lastX, _viewBox.y+_mouse_move_meta_lastY);
 	*/
-	metabar_update(_map_x, _map_y);
-
-	//console.log(_map_x, _map_y, _mouse_move_x, _mouse_move_y);
-	//metabar_update(_map_x + _mouse_move_x, _map_y + _mouse_move_y);
+	metabar_update(_viewBox.x, _viewBox.y);
 
 	_mouse_move_lastX = _mouse_move_x;
 	_mouse_move_lastY = _mouse_move_y;
@@ -252,12 +269,6 @@ $(function(){
     }
 
     function metabar_update(xval, yval){
-	/*
-	  var newx = Math.floor(_map_x*100/_TILESIZE)/100;
-	  var newy = Math.floor(_map_y*100/_TILESIZE)/100;
-	  var inner = newx+", "+newy;
-	*/
-
 	var fancyCoordsify = function(x, obj){
 	    var direction = x > 0 ? obj.pos : obj.neg;
 	    x = Math.abs(x);
@@ -286,8 +297,8 @@ $(function(){
     // -------------------------------------------------------------------------------- main
 
     // draw the initial map stuff (with Raphael!)
-    for (var x = _map_x - _TILESIZE; x < _map_x + parseInt(_RAPHAEL.width) + _TILESIZE; x += _TILESIZE) {
-	for (var y = _map_y - _TILESIZE; y < _map_y + parseInt(_RAPHAEL.height) + _TILESIZE; y += _TILESIZE) {
+    for (var x = _viewBox.x - _TILESIZE; x < _viewBox.x + parseInt(_RAPHAEL.width) + _TILESIZE; x += _TILESIZE) {
+	for (var y = _viewBox.y - _TILESIZE; y < _viewBox.y + parseInt(_RAPHAEL.height) + _TILESIZE; y += _TILESIZE) {
 	    tile_new(x,y);
 	}
     }
