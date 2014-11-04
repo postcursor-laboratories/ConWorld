@@ -150,16 +150,8 @@ $(function(){
     // -------------------------------------------------------------------------------- utilities
 
     function tile_name(x, y){
-	var sign = function(n){
-	    return n>1 ? 1 : -1;
-	}
-
-	x = unzoomcalc(x);
-	y = unzoomcalc(y);
-	x /= _TILESIZE;
-	y /= _TILESIZE;
-	x = sign(x)*Math.floor(Math.abs(x))
-	y = sign(y)*Math.floor(Math.abs(y))
+	x = Math.floor(unzoomcalc(x)/_TILESIZE);
+	y = Math.floor(unzoomcalc(y)/_TILESIZE);
 
 	return "tile_"+x+"_"+y;
     }
@@ -288,8 +280,8 @@ $(function(){
     // -------------------------------------------------------------------------------- main
 
     // draw the initial map stuff (with Raphael!)
-    for (var tilex = -10; tilex < 10; tilex++){
-	for (var tiley = -10; tiley < 10; tiley++){
+    for (var tilex = -3; tilex < 3; tilex++){
+	for (var tiley = -3; tiley < 3; tiley++){
 	    tile_new(tilex*_TILESIZE, tiley*_TILESIZE);
 	}
     }
