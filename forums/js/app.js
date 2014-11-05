@@ -3,8 +3,13 @@ define(["jqui", "firebase"], function ($undef, Firebase) {
     
     var hooks = {};
     app.hooks = hooks;
-    function generate_forum_topic(forum) {
-        return '<div id="' + forum.name() + '" class="forum-topic">' + forum.val() + '</div>';
+    function generate_forum_topic(topic) {
+        var fb = app.fire;
+        var stiky = topic.child('sticky-posts');
+        var posts = topic.child('posts');
+        var $container = $('<div id="' + topic.name() + '" class="forum-topic"></div>');
+        console.log($container);
+        return $container;
     }
     hooks.add_forum = function (forum, lastForumName) {
         var name = forum.name();
@@ -20,7 +25,7 @@ define(["jqui", "firebase"], function ($undef, Firebase) {
     };
 
     function setup_firehooks(fb) {
-        fb.on('child_added', hooks.add_forum);
+        fb.child('topics').on('child_added', hooks.add_forum);
     }
 
     app.init = function init() {
