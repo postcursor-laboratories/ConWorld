@@ -7,7 +7,7 @@ define(["jqui", "firebase"], function ($undef, Firebase) {
         var fb = app.fire;
         var stiky = topic.child('sticky-posts');
         var posts = topic.child('posts');
-        var $container = $('<div id="' + topic.name() + '" class="forum-topic"></div>');
+        var $container = $($('<div id="' + topic.name() + '" class="forum-topic"></div>'));
         console.log($container);
         return $container;
     }
