@@ -14,6 +14,11 @@ def ohhh_someprimes_igetagoodfeeling(tup):
     # tup will have three values
     assert len(tup) == 3
     return tup[0] * primes[0] + tup[1] * primes[2] + tup[2] * primes[1]
+def randomyish(tup):
+    random.seed(tup[0])
+    mi = min(tup[1], tup[2])
+    ma = max(tup[1], tup[2])
+    return random.nextint(mi, ma)
 def replwfunc(o):
     if isinstance(o, Number):
         cache = o
@@ -41,7 +46,7 @@ class ValueNoise:
         key = (x, y, self.seed)
         noise = self.noisemap
         if key not in noise:
-            random.seed(ohhh_someprimes_igetagoodfeeling(key))
+            random.seed(randomyish(key))
             noise[key] = random.randint(0, 1000) / 1000
         return noise[key]
     def smooth_noise(self, x, y):
@@ -60,8 +65,8 @@ class ValueNoise:
         #Bilinear interpolation http://en.wikipedia.org/wiki/Bilinear_interpolation
         value = 0.0
         value += fractX       * fractY       * self.noise(x1, y1)
-        value += fractX       * (1 - fractY) * self.noise(x2, y1)
-        value += (1 - fractX) * fractY       * self.noise(x1, y2)
+        value += fractX       * (1 - fractY) * self.noise(x1, y2)
+        value += (1 - fractX) * fractY       * self.noise(x2, y1)
         value += (1 - fractX) * (1 - fractY) * self.noise(x2, y2)
 
         return value
