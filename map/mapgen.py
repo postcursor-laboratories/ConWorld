@@ -7,23 +7,29 @@ import sys
 # ==========================================================================================
 # GLOBAL CONSTANTS
 
-# note that the size of each pixel is 20 meters
-base = .4
-count = 10
-freqs = []
-amps = []
-copy = count
-done = 0
-while done < count:
-    freqs.append(base/copy)
-    amps.append(copy)
-    copy /= 2.0
-    done += 1
-del copy
-del done
 _seed = 0xCAFEBABEDEADBEEF
 _tilesize = 256
-_heightmapper = heightmapper.create(freqs, amps, count, _seed)
+
+# ---------------------------------------- create _heightmapper
+base = .04
+count = 10
+
+freqfunc = lambda i: base/count*2**i
+ampfunc  = lambda i: count/2**i
+
+freqs = list(map(freqfunc, range(count)))
+amps  = list(map(ampfunc,  range(count)))
+
+#amps = [10.0, 5.0, 2.5, 1.25, 0.625, 0.3125, 0.15625, 0.078125, 0.0390625, 0.01953125]
+
+print("freqs:", freqs)
+print("amps: ", amps)
+
+_heightmapper = heightmapper.create(freqs, amps, len(freqs), _seed)
+
+del base, count, freqs, amps
+
+# ---------------------------------------- done creating _heightmapper
 
 _alt_sea   = 128
 _alt_beach = _alt_sea+20
