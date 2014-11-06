@@ -59,10 +59,10 @@ class ValueNoise:
 
         #Bilinear interpolation http://en.wikipedia.org/wiki/Bilinear_interpolation
         value = 0.0
-        value += fractX       * fractY       * self.noise(y1, x1)
-        value += fractX       * (1 - fractY) * self.noise(y2, x1)
-        value += (1 - fractX) * fractY       * self.noise(y1, x2)
-        value += (1 - fractX) * (1 - fractY) * self.noise(y2, x2)
+        value += fractX       * fractY       * self.noise(x1, y1)
+        value += fractX       * (1 - fractY) * self.noise(x2, y1)
+        value += (1 - fractX) * fractY       * self.noise(x1, y2)
+        value += (1 - fractX) * (1 - fractY) * self.noise(x2, y2)
 
         return value
     def generate(self, x, y):
