@@ -19,7 +19,7 @@ while y < y1:
     x = x0
     while x < x1:
         name = "tile_%d_%d" % (x, y)
-        print("<td><img src='map/tiles/%s.png' title='%s' /></td>" % (name, name))
+        print("<td><img src='tiles/%s.png' title='%s' /></td>" % (name, name))
         x+=1
 
     print("</tr>")
