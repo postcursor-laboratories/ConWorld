@@ -11,6 +11,6 @@ echo "Generating from X=[$lowx,$highx], Y=[$lowy,$highy]"
 
 for (( i=$lowx; $i<=$highx; i=$[$i+1] )); do
     for (( j=$lowy; $j<=$highy; j=$[$j+1] )); do
-	./mapgen.py $i $j &
+	./mapgen.py $i $j
     done
 done
