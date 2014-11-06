@@ -77,11 +77,6 @@ class ValueNoise:
             tmp /= self.octaves
             tmp *= 128
 
-            # temporary clamp
-            if tmp > 255:
-                tmp = 255
-            if tmp < 0:
-                tmp = 0
             result[key] = tmp
         return (result[key],)
 
