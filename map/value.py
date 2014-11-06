@@ -38,7 +38,8 @@ def bilinear_interpolation(x, y, points):
     if x1 != _x1 or x2 != _x2 or y1 != _y1 or y2 != _y2:
         raise ValueError('points do not form a rectangle')
     if not x1 <= x <= x2 or not y1 <= y <= y2:
-        raise ValueError('(x, y) not within the rectangle')
+        print(locals())
+        raise ValueError('({x}, {y}) not within the rectangle [({x1}, {y1}), ({x1}, {y2}), ({x2}, {y1}), ({x2}, {y2})]'.format(**locals()))
 
     return (q11 * (x2 - x) * (y2 - y) +
             q21 * (x - x1) * (y2 - y) +
