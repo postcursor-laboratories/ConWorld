@@ -9,6 +9,11 @@ def hashtuplesafe(tup):
         value = (1000003 * value) ^ item
     value = value ^ len(tup)
     return value
+def ohhh_someprimes_igetagoodfeeling(tup):
+    primes = [9601, 9931, 8693]
+    # tup will have three values
+    assert len(tup) == 3
+    return tup[0] * primes[0] + tup[1] * primes[2] + tup[2] * primes[1]
 def replwfunc(o):
     if isinstance(o, Number):
         cache = o
@@ -36,7 +41,7 @@ class ValueNoise:
         key = (x, y, self.seed)
         noise = self.noisemap
         if key not in noise:
-            random.seed(hashtuplesafe(key))
+            random.seed(ohhh_someprimes_igetagoodfeeling(key))
             noise[key] = random.randint(0, 1000) / 1000
         return noise[key]
     def smooth_noise(self, x, y):
