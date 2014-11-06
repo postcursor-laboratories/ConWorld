@@ -36,7 +36,7 @@ def bilinear_interpolation(x, y, points):
     (x1, y1, q11), (_x1, y2, q12), (x2, _y1, q21), (_x2, _y2, q22) = points
 
     if x1 != _x1 or x2 != _x2 or y1 != _y1 or y2 != _y2:
-        raise ValueError('points do not form a rectangle')
+        raise ValueError('points do not form a rectangle [({x1}, {y1}), ({_x1}, {y2}), ({x2}, {_y1}), ({_x2}, {_y2})]'.format(**locals()))
     if not x1 <= x <= x2 or not y1 <= y <= y2:
         print(locals())
         raise ValueError('({x}, {y}) not within the rectangle [({x1}, {y1}), ({x1}, {y2}), ({x2}, {y1}), ({x2}, {y2})]'.format(**locals()))
@@ -46,6 +46,10 @@ def bilinear_interpolation(x, y, points):
             q12 * (x2 - x) * (y - y1) +
             q22 * (x - x1) * (y - y1)
            ) / ((x2 - x1) * (y2 - y1) + 0.0)
+def round_away(x):
+    return math.floor(x) if x < 0 else math.ceil(x)
+def round_to(x):
+    return math.floor(x) if x > 0 else math.ceil(x)
 #------------------------------------------------------------------------------ 
 # Method 2 from http://lodev.org/cgtutor/randomnoise.html
 class ValueNoise:
@@ -72,10 +76,14 @@ class ValueNoise:
     def smooth_noise(self, x, y):
         """Returns the average value of the 4 neighbors of (x, y) from the
            noise array."""
-        x1 = int(x)
-        y1 = int(y)
-        x2 = x1 - 1
-        y2 = y1 - 1
+        x1 = round_away(x)
+        y1 = round_away(y)
+        x2 = round_to(x)
+        y2 = round_to(y)
+        if x1 == x2:
+            x2 += 1
+        if y1 == y2:
+            y2 += 1
 
         #Bilinear interpolation http://en.wikipedia.org/wiki/Bilinear_interpolation
         x1y1 = (x1, y1, self.noise(x1, y1))
