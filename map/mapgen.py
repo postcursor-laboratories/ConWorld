@@ -11,23 +11,19 @@ _seed = 0xCAFEBABEDEADBEEF
 _tilesize = 256
 
 # ---------------------------------------- create _heightmapper
-base = .04
+base = .004
 count = 10
 
 freqfunc = lambda i: base/count*2**i
-ampfunc  = lambda i: count/2**i
+ampfunc  = lambda i: count/(1.5)**i
 
 freqs = list(map(freqfunc, range(count)))
 amps  = list(map(ampfunc,  range(count)))
-
 #amps = [10.0, 5.0, 2.5, 1.25, 0.625, 0.3125, 0.15625, 0.078125, 0.0390625, 0.01953125]
-
-print("freqs:", freqs)
-print("amps: ", amps)
 
 _heightmapper = heightmapper.create(freqs, amps, len(freqs), _seed)
 
-del base, count, freqs, amps
+del base, count
 
 # ---------------------------------------- done creating _heightmapper
 

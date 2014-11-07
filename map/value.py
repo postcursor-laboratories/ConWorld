@@ -9,6 +9,7 @@ def hashtuplesafe(tup):
         value = (1000003 * value) ^ item
     value = value ^ len(tup)
     return value
+
 def replwfunc(o):
     if isinstance(o, Number):
         cache = o
@@ -16,6 +17,7 @@ def replwfunc(o):
     elif isinstance(o, Sequence):
         o = o.__getitem__
     return o
+
 def bilinear_interpolation(x, y, points):
     '''Interpolate (x,y) from values associated with four points.
 
@@ -37,6 +39,7 @@ def bilinear_interpolation(x, y, points):
 
     if x1 != _x1 or x2 != _x2 or y1 != _y1 or y2 != _y2:
         raise ValueError('points do not form a rectangle [({x1}, {y1}), ({_x1}, {y2}), ({x2}, {_y1}), ({_x2}, {_y2})]'.format(**locals()))
+
     if not x1 <= x <= x2 or not y1 <= y <= y2:
         print(locals())
         raise ValueError('({x}, {y}) not within the rectangle [({x1}, {y1}), ({x1}, {y2}), ({x2}, {y1}), ({x2}, {y2})]'.format(**locals()))
@@ -46,10 +49,13 @@ def bilinear_interpolation(x, y, points):
             q12 * (x2 - x) * (y - y1) +
             q22 * (x - x1) * (y - y1)
            ) / ((x2 - x1) * (y2 - y1) + 0.0)
+
 def round_away(x):
     return math.floor(x) if x < 0 else math.ceil(x)
+
 def round_to(x):
     return math.floor(x) if x > 0 else math.ceil(x)
+
 #------------------------------------------------------------------------------ 
 # Method 2 from http://lodev.org/cgtutor/randomnoise.html
 class ValueNoise:
@@ -66,6 +72,7 @@ class ValueNoise:
         self.noisemap = {}
         self.resultmap = {}
         self.xycmap = {}
+
     def noise(self, x, y):
         key = (x, y, self.seed)
         noise = self.noisemap
@@ -73,6 +80,7 @@ class ValueNoise:
             random.seed(hashtuplesafe(key))
             noise[key] = random.randint(0, 1000) / 1000
         return noise[key]
+
     def smooth_noise(self, x, y):
         """Returns the average value of the 4 neighbors of (x, y) from the
            noise array."""
@@ -92,6 +100,7 @@ class ValueNoise:
         x2y2 = (x2, y2, self.noise(x2, y2))
 
         return bilinear_interpolation(x, y, [x1y1, x1y2, x2y1, x2y2])
+
     def generate(self, x, y):
         """
         Generate dat value noise, boi
@@ -110,6 +119,7 @@ class ValueNoise:
             tmp *= 128
 
             result[key] = tmp
+
         return (result[key],)
 
 __all__ = ["ValueNoise"]
