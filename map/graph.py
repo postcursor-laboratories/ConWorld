@@ -4,7 +4,7 @@ import sys
 import mapgen
 
 _ploth = 60
-_plotw = 80
+_plotw = 100
 
 def within_range(a, b, r):
     return abs(b-a) <= r
@@ -17,9 +17,13 @@ def plot(xs, ys, l1="x", l2="y"):
     ytick = max(ys)/_ploth
     xtick = max(xs)/_plotw
 
+    if xtick == 0:	xtick = 1
+    if ytick == 0:	ytick = 1
+
     # if our xtick and ytick are within 20% of each other, make them the same
     bigtick = max(xtick,ytick)
     smltick = min(xtick,ytick)
+
     if bigtick/smltick - 1 < .2:
         tick = max(ytick,xtick)
         xtick = ytick = tick
@@ -47,6 +51,17 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         freqs = mapgen.freqs
         amps  = mapgen.amps
+    elif sys.argv[1] == '--help':
+        print("""
+Usage: python3 graph.py --help		to get this help message
+       python3 graph.py			to graph mapgen's freqs and amps
+       python3 graph.py x,y x,y ...	to graph arbitrary data
+
+       Note that the last option will take any number of x,y pairs, for float
+       values of x and y, but the arguments must be of the form `<x>,<y>' exactly
+       (no whitespace between <x> and <y>, just a comma)
+""")
+        exit(1)
     else:
         freqs = []
         amps  = []
@@ -54,5 +69,8 @@ if __name__ == '__main__':
             s1, s2 = s.split(',',2)
             freqs.append(float(s1))
             amps.append(float(s2))
+
+    #rnd = lambda x: int(x*1000)/1000
+    #print("Plotting ~= ", list(zip(map(rnd,freqs),map(rnd,amps))))
 
     plot(freqs, amps, l1="Frequency", l2="Amplitude")
