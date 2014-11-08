@@ -5,3 +5,5 @@ webhooks/
 /map/data/*
 /.idea/*
 /map/tiles/tile*
+bower_components/
+/forums/js/
