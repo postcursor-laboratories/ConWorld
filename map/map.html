@@ -1,28 +1,24 @@
-<!-- Wrap file in <div> so map.py prints it all -->
-<div>
-  <!-- Note that this is printed from ../map.py, so paths should include this dir -->
-  <script src="map/raphael.js"></script>
-  <script src="map/jquery-2.1.1.js"></script>
-  <script src="map/map.js"></script>
-  
-  <table border="4" style="background-color: lightgrey;">
-    
-    <!-- info on the map; if you change the number of items, change the colspan in the next row -->
-    <tr>
-      <th id="mapName">The Land of Cardigan</th>
-      <th id="mapPosition"></th>
-      <th id="mapZoomLevel">
-	<!--<input type="range" id="zoomSlider" min="0" max="6" />-->
-	<div id="zoomLabel">Zoom: 1x</div>
-      </th>
-    </tr>
-    
-    <tr>
-      <td colspan="3" style="overflow: hidden;">
-	<div id="mapFrame" style="width: 1000px; height: 700px; background-color: darkgrey; cursor: move;">
-	</div>
-      </td>
-    </tr>
-  </table>
+<!-- Note that this is printed from ../map.py, so paths should include this dir -->
+<script src="map/raphael.js"></script>
+<script src="map/jquery-2.1.1.js"></script>
+<script src="map/map.js"></script>
 
-</div>
+<table border="4" style="background-color: lightgrey;">
+
+  <!-- info on the map; if you change the number of items, change the colspan in the next row -->
+  <tr>
+    <th id="mapName">The Land of Cardigan</th>
+    <th id="mapPosition"></th>
+    <th id="mapZoomLevel">
+      <!--<input type="range" id="zoomSlider" min="0" max="6" />-->
+      <div id="zoomLabel">Zoom: 1x</div>
+    </th>
+  </tr>
+
+  <tr>
+    <td colspan="3" style="overflow: hidden;">
+      <div id="mapFrame" style="width: 1000px; height: 700px; background-color: darkgrey; cursor: move;">
+      </div>
+    </td>
+  </tr>
+</table>
