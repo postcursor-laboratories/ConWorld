@@ -1,0 +1,24 @@
+{
+  "name": "conworld",
+  "version": "0.0.1",
+  "homepage": "https://github.com/postcursor-laboratories/ConWorld",
+  "authors": [
+    "Kenzie Togami",
+    "Charlie Green",
+    "and Kenyon Prater"
+  ],
+  "description": "worldbuilding project",
+  "license": "None",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "coffee-script": "~1.8.0",
+    "iced-coffee-script": "~1.6.1"
+  }
+}
