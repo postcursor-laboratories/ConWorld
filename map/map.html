@@ -1,60 +1,28 @@
-<!-- Note that this is printed from ../map.py, so paths should include this dir -->
-
-
-<style type="text/css">
-.draggable{
-	position:relative;
-	cursor: move;
-}
-
-#mapTable{
-	border: 0;
-	margin: 0;
-	padding: 0;
-}
-
-.mapTableEntry > img {
-	width: 256px;
-	height: 256px;
-}
-</style>
-
-<script src="map/mapping.js"></script>
-
-<table border=4 style="background-color: lightgrey;">
-  <!-- info on the map; if you change the number of items, change the colspan in the next row -->
-  <tr>
-    <th id="mapName">The Land of Shererereroth.. or.. something</th>
-    <th id="mapPosition"></th>
-    <th id="mapZoomLevel">Zoom: 1x</th>
-  </tr>
-
-  <tr>
-    <td colspan=3 style="overflow: hidden;">
-      <div id="mapFrame" style="width: 1000px; height: 700px; background-color: darkgrey;">
-	<div id="mapTableHolder" class="draggable">
-	  <!--<img id='mapImage' src='map/someRandomMap.jpg' class='draggable' style='top:-500px;left:-500px;zoom=.5' />-->
-	  <table id="mapTable" cellspacing="0" cellpadding="0">
-	  
-	    <!-- Create the table that holds our map. Note that by default no tiles are loaded. -->
-	    <script type="text/javascript">
-mapSize = 32;
-for(var y=0; y<mapSize; y++){
-	document.write('<tr>');
- 	for(var x=0; x<mapSize; x++){
- 		var name = tile_name(x,y);
-		document.write('<td><div class="mapTableEntry" id="'+name+'" currentlyLoaded="N"><img src="map/unloaded.png" /></div></td>');
-	}
-	document.write('</tr>');
-}
-
-map_move(-256*mapSize/2, -256*mapSize/2); // starts us off in the middle of the map
-			  </script>
-	  
-	  </table>
+<!-- Wrap file in <div> so map.py prints it all -->
+<div>
+  <!-- Note that this is printed from ../map.py, so paths should include this dir -->
+  <script src="map/raphael.js"></script>
+  <script src="map/jquery-2.1.1.js"></script>
+  <script src="map/map.js"></script>
+  
+  <table border="4" style="background-color: lightgrey;">
+    
+    <!-- info on the map; if you change the number of items, change the colspan in the next row -->
+    <tr>
+      <th id="mapName">The Land of Cardigan</th>
+      <th id="mapPosition"></th>
+      <th id="mapZoomLevel">
+	<!--<input type="range" id="zoomSlider" min="0" max="6" />-->
+	<div id="zoomLabel">Zoom: 1x</div>
+      </th>
+    </tr>
+    
+    <tr>
+      <td colspan="3" style="overflow: hidden;">
+	<div id="mapFrame" style="width: 1000px; height: 700px; background-color: darkgrey; cursor: move;">
 	</div>
-      </div>
-    </td>
-  </tr>
-</table>
+      </td>
+    </tr>
+  </table>
 
+</div>

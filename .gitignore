@@ -4,4 +4,4 @@ __pycache__/
 webhooks/
 bower_components/
 /forums/js/
-
+map/tiles/tile*
