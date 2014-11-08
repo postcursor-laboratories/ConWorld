@@ -11,11 +11,11 @@ _seed = 0xCAFEBABEDEADBEEF
 _tilesize = 256
 
 # ---------------------------------------- create _heightmapper
-base = .004
-count = 10
+base = .04
+count = 5
 
 freqfunc = lambda i: base/count*2**i
-ampfunc  = lambda i: count/(1.5)**i
+ampfunc  = lambda i: count/(2)**i
 
 freqs = list(map(freqfunc, range(count)))
 amps  = list(map(ampfunc,  range(count)))
@@ -82,7 +82,6 @@ def generate_tile(tilex, tiley):
     mp = transform_addAltitude(hm)
 
     createPNG(mp, "tiles/tile_%d_%d.png" % (tilex, tiley), _tilesize)
-    
 
 def createPNG(pixelfunc, filename, size):
     """Saves a PNG file as FILENAME, where that PNG is generated with each pixel being

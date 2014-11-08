@@ -7,7 +7,16 @@ import value
 def create(freqs, amps, octs, seed=None):
     if seed == None:
         seed = 203840           # Keysmash of Grand Worldbuilding
-    return value.ValueNoise(freqs, amps, octaves=octs, seed=seed).generate
+    def noise(x,y):
+        val = value.ValueNoise(freqs, amps, octaves=octs, seed=seed).generate(x,y)[0]
+        if val < 0:
+            print("heightmapper: WARNING: noise for ({},{}) = {} (negative). Clamping to zero.".format(x,y,val))
+            val = 0
+        elif val > 255:
+            print("heightmapper: WARNING: noise for ({},{}) = {} (>255). Clamping to 255.".format(x,y,val))
+            val = 255
+        return (val,)
+    return noise
 
 def toPNG(func, xsize, ysize):
     pngdata = []

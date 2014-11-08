@@ -65,7 +65,9 @@ class ValueNoise:
     """
     def __init__(self, frequency=0.4, amplitude=1, octaves=10.0, seed=0):
         self.frequency = replwfunc(frequency)
-        self.amplitude = replwfunc(amplitude)
+        #self.amplitude = lambda x: (1+math.tanh(replwfunc(amplitude)(x) - max(amplitude)/2))/2
+        #self.amplitude = replwfunc(amplitude)
+        self.amplitude = lambda x: replwfunc(amplitude)(x)/sum(amplitude)
         self.octaves = octaves
         self.seed = seed
         self.random = random.Random()
@@ -115,8 +117,8 @@ class ValueNoise:
                 f = self.frequency(n)
                 a = self.amplitude(n)
                 tmp += self.smooth_noise(x*f, y*f)*a
-            tmp /= self.octaves
-            tmp *= 128
+            #tmp /= self.octaves
+            tmp *= 255
 
             result[key] = tmp
 
