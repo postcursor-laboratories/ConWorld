@@ -16,7 +16,7 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
         $ "<div
            id=#{doubleQuote title}
            class=#{doubleQuote @topic_class_string}>
-           #{htmlEscape desc}
+           #{htmlEscape description}
            </div>"
       return $data
     @onTopicAdded = (childSnap, lastName) =>
