@@ -1,9 +1,9 @@
 define ["jqui", "firebase"], ($jqui, Firebase) ->
-  doubleQuote = (string) -> "\"#{string}\""
   htmlEscape = (unsafeString) ->
     div = document.createElement 'div'
     div.appendChild document.createTextNode(unsafeString)
     return div.innerHTML
+  doubleQuote = (string) -> "\"#{htmlEscape string}\""
   defineEverything = (@firebaseURL) =>
     @firebase = new Firebase @firebaseURL
     @forums = @firebase.child 'forums'
