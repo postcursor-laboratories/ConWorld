@@ -19,9 +19,13 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
            #{htmlEscape description}
            </div>"
       return $data
-    @onTopicAdded = (childSnap, lastName) =>
+    secureOTA = (childSnap, lastName) =>
       @$div.append generateTopic(childSnap)
-    @init = =>
+    @onTopicAdded = (childSnap, lastName) ->
+      secureOTA.apply this, arguments
+    secureInit = =>
       @forums.child('topics').on 'child_added', @onTopicAdded
+    @init = ->
+      secureInit.apply this, arguments
     return this
   return defineEverything.call {}, 'https://conworld.firebaseio.com/'
