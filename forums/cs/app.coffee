@@ -22,5 +22,5 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     @onTopicAdded: (childSnap, lastName) ->
       @$div.append generateTopic(childSnap)
     init: ->
-      @firebase.child('topics').on 'child_added', onTopicAdded
+      @forums.child('topics').on 'child_added', onTopicAdded
   return new App("conworld.firebaseio.com")
