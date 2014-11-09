@@ -5,6 +5,7 @@ XML tags made Pythonic.
 import collections
 import bs4
 
+wrapper = 'wrapper'
 void = 'area, base, br, col, embed, hr, img, input, keygen, link, meta, param, source, track, wbr'.split(', ')
 
 def isvoid(tag):
@@ -97,13 +98,17 @@ class TagMaker:
         You may provide just the url, it will be used as the text
         """
         def morph(obj):
+            if type(obj) == str:
+                return (obj, obj)
             if hasattr(obj, '__len__'):
                 return obj if len(obj) > 1 else (obj[0], obj[0])
             return (obj, obj)
         return [self.a(href=urltext[0], content=urltext[1]) for urltext in (morph(obj) for obj in linklist)]
     def parse(self, string):
-        soup = bs4.BeautifulSoup(string, 'xml')
+        soup = bs4.BeautifulSoup(maketag(wrapper).get_tag(string), 'xml')
         tag = recursiveparse(soup)
+        if tag[0].tag_name == wrapper:
+          tag = tag[0].content
         return tag
     def parsefile(self, f):
         with open(f) as fd:
