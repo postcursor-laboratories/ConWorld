@@ -5,8 +5,9 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     div.appendChild document.createTextNode(unsafeString)
     return div.innerHTML
   class App
-    constructor: (@firebase) ->
-      @forums = new Firebase "#{@firebase}/forums"
+    constructor: (@firebaseURL) ->
+      @firebase = new Firebase @firebaseURL
+      @forums = @firebase.child 'forums'
     @$div = $ '#forums'
     @topic_class_string = 'topic'
     generateTopic = (childSnapshot) ->
@@ -23,5 +24,6 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
       @$div.append generateTopic(childSnap)
     oTA = @onTopicAdded
     init: ->
+      console.log this
       @forums.child('topics').on 'child_added', oTA
   return new App("conworld.firebaseio.com")
