@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import heightmapper
 import mapgen
 from datamapper import *
@@ -10,7 +12,7 @@ class HeightDataMap(DataMap):
     def __init__(self):
         super(HeightDataMap, self).__init__("heightmap") #TODO maybe this needs super(args and blah)
 
-    def generate_tile(self, tile_x, tile_y, heightmap, size=32):
+    def generate_tile(self, tile_x, tile_y, heightmap, size=256):
         """Produces a datamap of the height at x,y. Only modifies the tile at x,y."""
         tile = Tile(tile_x,tile_y, self, size)
         for y in range(size):
@@ -33,24 +35,22 @@ while done < count:
 del copy
 del done
 _seed = 0xCAFEBABEDEADBEEF
-_tilesize = 32
+_tilesize = 256
 _heightmapper = heightmapper.create(freqs, amps, count, _seed)
 
 def get_heightmap(tilex, tiley, tilesize):
     return lambda x, y: _heightmapper(tilex*tilesize+x, tiley*tilesize+y)
 
 def debug():
-    hm = get_heightmap(0,0,32)
+    hm = get_heightmap(0,0,256)
     #d = HeightDataMap()
-    #d.generate_tile(0, 0, hm,32)
+    #d.generate_tile(0, 0, hm,256)
     #print(d.tile_exists(0, 0))
-    #print(d.load_tile(0, 0)[32][32])
-    for y in range(32):
-            for x in range(32):
-                h = hm(x,y)[0]
-pr = cProfile.Profile()
-pr.enable()
-mapgen.debug()
-pr.disable()
-sortby = 'cumulative'
-pr.print_stats()
+    #print(d.load_tile(0, 0)[256][256])
+    for y in range(256):
+            for x in range(256):
+                h = hm(x, y)[0]
+            print(y)
+
+debug()
+
