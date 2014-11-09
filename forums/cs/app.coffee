@@ -24,4 +24,4 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     @init = =>
       @forums.child('topics').on 'child_added', @onTopicAdded
     return this
-  return defineEverything.call {}, 'https://conworld.firebase.io/'
+  return defineEverything.call {}, 'https://conworld.firebaseio.com/'
