@@ -22,6 +22,6 @@ def massive_map_pixel_func(x,y):
 if __name__ == '__main__':
     scale = int(sys.argv[1])
     n = int(sys.argv[2])
-    print("generating %d square map with scale %d" % (n,scale))
+    print("generating %d px square map with scale %d" % (n,scale))
     print("estimated time: %ds" % (n**2/256**2*48))
     mapgen.createPNG(massive_map_pixel_func, "massivemap.png", n)
