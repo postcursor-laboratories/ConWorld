@@ -9,7 +9,7 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
       @forums = new Firebase "#{@firebase}/forums"
     @$div = $ '#forums'
     @topic_class_string = 'topic'
-    generateTopic (childSnapshot) ->
+    generateTopic = (childSnapshot) ->
       title = childSnapshot.child('title').val()
       description = childSnapshot.child('desc').val()
       $data =
