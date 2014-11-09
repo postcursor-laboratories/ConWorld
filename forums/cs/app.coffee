@@ -4,13 +4,12 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     div = document.createElement 'div'
     div.appendChild document.createTextNode(unsafeString)
     return div.innerHTML
-  class App
-    constructor: (@firebaseURL) ->
-      @firebase = new Firebase @firebaseURL
-      @forums = @firebase.child 'forums'
+  defineEverything = (@firebaseURL) =>
+    @firebase = new Firebase @firebaseURL
+    @forums = @firebase.child 'forums'
     @$div = $ '#forums'
     @topic_class_string = 'topic'
-    generateTopic = (childSnapshot) ->
+    generateTopic = (childSnapshot) =>
       title = childSnapshot.child('title').val()
       description = childSnapshot.child('desc').val()
       $data =
@@ -20,10 +19,9 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
            #{htmlEscape desc}
            </div>"
       return $data
-    @onTopicAdded: (childSnap, lastName) ->
+    @onTopicAdded = (childSnap, lastName) =>
       @$div.append generateTopic(childSnap)
-    oTA = @onTopicAdded
-    init: ->
-      console.log this
-      @forums.child('topics').on 'child_added', oTA
-  return new App("conworld.firebaseio.com")
+    @init = =>
+      @forums.child('topics').on 'child_added', @onTopicAdded
+    return this
+  return defineEverything.call {}, 'https://conworld.firebase.io/'
