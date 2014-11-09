@@ -23,4 +23,4 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
       @$div.append generateTopic(childSnap)
     init: ->
       @firebase.child('topics').on 'child_added', onTopicAdded
-  return app
+  return new App()
