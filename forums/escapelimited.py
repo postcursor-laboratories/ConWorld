@@ -15,12 +15,11 @@ markdownheaders = {'Accept': 'application/vnd.github.v3+json'}
 def github_markdown(unsafe):
     unsafe = cgi.escape(unsafe) # no HTML
     postdata = {'text': unsafe, 'mode': 'markdown'}
+    print(postdata)
     response = requests.post(mdurl, json=postdata, headers=markdownheaders)
+    print(response.status_code)
+    print(response.headers)
     print(response.text)
-    try:
-        print(response.json())
-    except:
-      pass
     return response.text
 
 inputkey = 'input'
