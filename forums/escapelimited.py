@@ -32,7 +32,7 @@ if __name__ == "__main__":
         data = 'none transmitted'
     if not inputkey in form:
         fail()
-    input_ = form[inputkey]
+    input_ = form[inputkey].value
     if not input_:
         fail()
     conlib.write_status(code)
