@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import cgi, os, urllib, sys
-import cgitb
-cgitb.enable()
 import tag
 
 xml = tag.maker()
