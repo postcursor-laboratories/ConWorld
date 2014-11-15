@@ -19,4 +19,7 @@ def get_url(frag):
             frag = '/' + frag
     return API_URL + frag
 
-__all__ = ["get_url"]
+with open('/home/kenzie/conworld-token') as tokenfile:
+    token = tokenfile.read()
+
+__all__ = ["get_url", "token"]
