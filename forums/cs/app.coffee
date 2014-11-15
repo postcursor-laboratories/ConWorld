@@ -14,7 +14,7 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     @$div = $ '#forums'
     @topic_class_string = 'topic'
     @desc_class_string = 'topic-description'
-    generateTopic = (childSnapshot) =>
+    generateTopic = (childSnapshot, callback) =>
       title = childSnapshot.child('title').val()
       description = childSnapshot.child('desc').val()
       await limitedHtmlEscape description, defer descEscaped
@@ -26,9 +26,10 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
                #{descEscaped}
              </p>
            </div>"
-      return $data
+      callback $data
     secureOTA = (childSnap, lastName) =>
-      @$div.append generateTopic(childSnap)
+      await generateTopic childSnap, defer generatedDiv
+      @$div.append generatedDiv
     @onTopicAdded = (childSnap, lastName) ->
       secureOTA.apply this, arguments
     secureInit = =>
