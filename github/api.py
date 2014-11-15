@@ -21,5 +21,6 @@ def get_url(frag):
 
 with open('/home/kenzie/conworld-token') as tokenfile:
     token = tokenfile.read()
+auth = (token, '')
 
-__all__ = ["get_url", "token"]
+__all__ = ["get_url", "token", "auth"]

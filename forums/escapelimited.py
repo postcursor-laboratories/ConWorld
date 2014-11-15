@@ -4,6 +4,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..')) # top-level py
 import conlib
 import requests
 import cgi
+from github import api
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup, Comment
 from http.client import OK, BAD_REQUEST
@@ -14,7 +15,7 @@ markdownheaders = {'Accept': 'application/vnd.github.v3+json'}
 def github_markdown(unsafe):
     unsafe = cgi.escape(unsafe) # no HTML
     postdata = {'text': unsafe, 'mode': 'markdown'}
-    response = requests.post(mdurl, json=postdata, headers=markdownheaders)
+    response = requests.post(mdurl, json=postdata, headers=markdownheaders, auth=api.auth)
     return response.text
 
 inputkey = 'input'

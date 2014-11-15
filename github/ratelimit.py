@@ -4,10 +4,10 @@ sys.path.insert(1, os.path.join(sys.path[0], '..')) # top-level py
 import conlib
 import requests
 import datetime
-from github.api import get_url
+from github.api import get_url, auth
 conlib.rewrite_relatives(levels=1)
 
-def get_raw_rate_json(request_auth=None):
+def get_raw_rate_json(request_auth=auth):
     req = requests.get(get_url('/rate_limit'), auth=request_auth)
     req.raise_for_status()
     json = req.json()
@@ -23,8 +23,8 @@ def readable_date(millis_since_epoch):
 def write_rate_limit():
     corerate = get_rate_data()
     print('Core rate data:', "{}/{}, resets on {}".format(corerate['remaining'],
-                                                         corerate['limit'],
-                                                         readable_date(corerate['reset'])))
+                                                          corerate['limit'],
+                                                          readable_date(corerate['reset'])))
 
 if __name__ == "__main__":
     conlib.write_page(write_rate_limit)
