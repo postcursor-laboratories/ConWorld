@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, os, urllib, sys
+import cgi, os, urllib, sys, re
 import tag
 
 xml = tag.maker()
@@ -20,6 +20,29 @@ site_title = xml.h1((shitty_globe, xml.u('Welcome to ConWorld'), shitty_globe))
 links = xml.links([['index.py', 'Home'], ['about.py', 'About'], ['map.py', 'Map'], ['forums', 'Forums'],
                   ['uh.py', 'and'], ['uh.py', 'some'], ['uh.py', 'more'], ['uh.py', 'links!']])
 
+# rewrite conlib so it works in different levels
+levels_down = 0
+notrelative = re.compile('^(?!(//)|(http://)||(https://)|)')
+def rewrite_relatives(levels):
+    global levels_down
+    if levels > levels_down:
+        levels -= levels_down
+    elif levels < levels_down:
+        # we are trying to back out
+        # unsupport operation right now
+        raise ValueError("{} < {}, cannot back out".format(levels, levels_down))
+    prepend = '../' * levels
+    def rewrite(tag):
+        if tag.tag_name in ['img', 'script'] and notrelative.match(tag.attrs['src']) is None:
+            # images and scripts
+            tag.attrs['src'] = prepend + tag.attrs['src']
+        elif tag.tag_name in ['link', 'a'] and notrelative.match(tag.attrs['href']) is None:
+            # stylesheets and links
+            tag.attrs['href'] = prepend + tag.attrs['href']
+    [rewrite(tag) for tag in default_tags]
+    rewrite(shitty_globe)
+    [rewrite(tag) for tag in links]
+    levels_down += levels
 # ================================================================ For printing different sections
 def print_section_head(tag_set=default_tags):
     tags = list(tag_set)

@@ -2,7 +2,6 @@
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..')) # top-level py
 import conlib
-import re
 import requests
 import cgi
 from urllib.parse import urljoin

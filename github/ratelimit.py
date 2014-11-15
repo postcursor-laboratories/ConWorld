@@ -5,6 +5,7 @@ import conlib
 import requests
 import datetime
 from github.api import get_url
+conlib.rewrite_relatives(levels=1)
 
 def get_raw_rate_json(request_auth=None):
     req = requests.get(get_url('/rate_limit'), auth=request_auth)
