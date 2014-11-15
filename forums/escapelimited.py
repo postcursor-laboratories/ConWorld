@@ -15,11 +15,7 @@ markdownheaders = {'Accept': 'application/vnd.github.v3+json'}
 def github_markdown(unsafe):
     unsafe = cgi.escape(unsafe) # no HTML
     postdata = {'text': unsafe, 'mode': 'markdown'}
-    print(postdata)
     response = requests.post(mdurl, json=postdata, headers=markdownheaders)
-    print(response.status_code)
-    print(response.headers)
-    print(response.text)
     return response.text
 
 inputkey = 'input'
@@ -38,12 +34,10 @@ if __name__ == "__main__":
     conlib.write_status(code)
     print('Content-type: text/plain')
     conlib.end_headers()
-    print('your input:', input_)
     if code != OK:
         sys.exit(0)
     data = github_markdown(input_)
     if not data:
-      print('no data .....?')
-      sys.exit(0)
-    print('yes, there is actually data')
+        print('no data from markdown, complain to devs')
+        sys.exit(0)
     print(data)
