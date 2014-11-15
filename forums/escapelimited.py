@@ -27,12 +27,14 @@ if __name__ == "__main__":
     form = cgi.FieldStorage()
     code = OK
     data = ''
-    input_ = ''
+    def fail():
+        ocde = BAD_REQUEST
+        data = 'none transmitted'
     if not inputkey in form:
-        input_ = form[inputkey]
-        if not input_:
-            code = BAD_REQUEST
-            data = 'no data transmitted'
+        fail()
+    input_ = form[inputkey]
+    if not input_:
+        fail()
     conlib.write_status(code)
     print('Content-type: text/plain')
     conlib.end_headers()
