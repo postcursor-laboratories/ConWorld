@@ -4,9 +4,9 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     div.appendChild document.createTextNode(unsafeString)
     return div.innerHTML
   limitedHtmlEscapeURL = 'escapelimited.py'
-  limitedHtmlEscape = (unsafeString) ->
+  limitedHtmlEscape = (unsafeString, callback) ->
     await $.post limitedHtmlEscapeURL, {'input': unsafeString}, defer output
-    return output
+    callback output
   doubleQuote = (string) -> "\"#{htmlEscape string}\""
   defineEverything = (@firebaseURL) =>
     @firebase = new Firebase @firebaseURL
@@ -17,12 +17,13 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     generateTopic = (childSnapshot) =>
       title = childSnapshot.child('title').val()
       description = childSnapshot.child('desc').val()
+      await limitedHtmlEscape description, defer descEscaped
       $data =
         $ "<div
            id=#{doubleQuote title}
            class=#{doubleQuote @topic_class_string}>
              <p class=#{doubleQuote @desc_class_string}>
-               #{limitedHtmlEscape description}
+               #{descEscaped}
              </p>
            </div>"
       return $data
