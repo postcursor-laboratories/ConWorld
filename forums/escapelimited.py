@@ -20,7 +20,7 @@ def github_markdown(unsafe):
 
 inputkey = 'input'
 if __name__ == "__main__":
-    form = cgi.FormStorage()
+    form = cgi.FieldStorage()
     code = OK
     data = ''
     input_ = ''
