@@ -38,6 +38,8 @@ if __name__ == "__main__":
     conlib.write_status(code)
     print('Content-type: text/plain')
     conlib.end_headers()
+    if code != OK:
+        sys.exit(0)
     data = github_markdown(input_)
     if not data:
       print('no data .....?')
