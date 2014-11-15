@@ -30,10 +30,10 @@ if __name__ == "__main__":
         if not input_:
             code = BAD_REQUEST
             data = 'no data transmitted'
-    data = github_markdown(input_)
     conlib.write_status(code)
     print('Content-type: text/plain')
     conlib.end_headers()
+    data = github_markdown(input_)
     if not data:
       print('no data .....?')
       sys.exit(0)
