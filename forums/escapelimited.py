@@ -16,7 +16,11 @@ def github_markdown(unsafe):
     unsafe = cgi.escape(unsafe) # no HTML
     postdata = {'text': unsafe, 'mode': 'markdown'}
     response = requests.post(mdurl, json=postdata, headers=markdownheaders)
-    print(response)
+    print(response.text)
+    try:
+        print(response.json())
+    except:
+      pass
     return response.text
 
 inputkey = 'input'
