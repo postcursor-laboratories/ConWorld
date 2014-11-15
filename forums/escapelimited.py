@@ -33,4 +33,8 @@ if __name__ == "__main__":
     conlib.write_status(code)
     print('Content-type: text/plain')
     conlib.end_headers()
+    if not data:
+      print('no data .....?')
+      sys.exit(0)
+    print('yes, there is actually data')
     print(data)
