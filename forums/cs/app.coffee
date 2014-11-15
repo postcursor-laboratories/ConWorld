@@ -29,6 +29,7 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
       callback $data
     secureOTA = (childSnap, lastName) =>
       await generateTopic childSnap, defer generatedDiv
+      console.log(generatedDiv)
       @$div.append generatedDiv
     @onTopicAdded = (childSnap, lastName) ->
       secureOTA.apply this, arguments
