@@ -19,8 +19,10 @@ def get_url(frag):
             frag = '/' + frag
     return API_URL + frag
 
-with open('/home/kenzie/conworld-token') as tokenfile:
-    token = tokenfile.read()
+token = False # because local dev overrides
+if not token:
+    with open('/home/kenzie/conworld-token') as tokenfile:
+        token = tokenfile.read().replace('\n', '')
 auth = (token, '')
 
 __all__ = ["get_url", "token", "auth"]
