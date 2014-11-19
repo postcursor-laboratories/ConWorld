@@ -1,0 +1,55 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (4.1.8)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.1)
+      tzinfo (~> 1.1)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
+    celluloid-io (0.16.1)
+      celluloid (>= 0.16.0)
+      nio4r (>= 1.0.0)
+    ffi (1.9.6-x64-mingw32)
+    gemoji (1.5.0)
+    github-markdown (0.6.7)
+    github-markdown-preview (3.1.2)
+      gemoji (~> 1.5)
+      github-markdown (~> 0.6)
+      html-pipeline (~> 1.8)
+      listen (= 2.7)
+      sanitize (~> 2.1)
+    hitimes (1.2.2)
+    html-pipeline (1.11.0)
+      activesupport (>= 2)
+      nokogiri (~> 1.4)
+    i18n (0.6.11)
+    json (1.8.1)
+    listen (2.7.0)
+      celluloid (>= 0.15.2)
+      celluloid-io (>= 0.15.0)
+      rb-fsevent (>= 0.9.3)
+      rb-inotify (>= 0.9)
+    mini_portile (0.6.1)
+    minitest (5.4.3)
+    nio4r (1.0.1)
+    nokogiri (1.6.4.1-x64-mingw32)
+      mini_portile (~> 0.6.0)
+    rb-fsevent (0.9.4)
+    rb-inotify (0.9.5)
+      ffi (>= 0.5.0)
+    sanitize (2.1.0)
+      nokogiri (>= 1.4.4)
+    thread_safe (0.3.4)
+    timers (4.0.1)
+      hitimes
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  github-markdown-preview
