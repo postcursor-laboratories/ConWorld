@@ -8,6 +8,7 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
     await $.post limitedHtmlEscapeURL, {'input': unsafeString}, defer output
     callback output
   doubleQuote = (string) -> "\"#{htmlEscape string}\""
+  htmlSafeId = (id) -> id.replace(/[^a-zA-Z0-9]/, '_')
   defineEverything = (@firebaseURL) =>
     @firebase = new Firebase @firebaseURL
     @forums = @firebase.child 'forums'
@@ -20,9 +21,9 @@ define ["jqui", "firebase"], ($jqui, Firebase) ->
       await limitedHtmlEscape description, defer descEscaped
       $data =
         $ "<div
-           id=#{doubleQuote title}
-           class=#{doubleQuote @topic_class_string}>
-             <p class=#{doubleQuote @desc_class_string}>
+           id=#{doubleQuote htmlSafeId title}
+           class=#{doubleQuote htmlSafeId @topic_class_string}>
+             <p class=#{doubleQuote htmlSafeId @desc_class_string}>
                #{descEscaped}
              </p>
            </div>"
