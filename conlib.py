@@ -50,7 +50,7 @@ def print_footer():
     br.print_tag()
     br.print_tag()
     print('<footer>')
-    print('&copy; 2014.')
+    print('&copy; 2014 to 2015')
     print('</footer>')
 
 # ================================================================ Utility functions
